@@ -33,6 +33,30 @@ loader.load(
   }
 );
 
+
+loader.load(
+  "./my_avatar.glb",
+  function (glb) {
+    console.log("Avatar loaded:", glb);
+    const avatar = glb.scene;
+    avatar.scale.set(2, 2, 2); // Adjust scale as needed
+    avatar.position.set(-3,0, 45); // Adjust position to place the avatar in the scene
+    avatar.traverse((child) => {
+      if (child.isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+    });
+    scene.add(avatar);
+  },
+  undefined,
+  function (error) {
+    console.error("Error loading avatar:", error);
+  }
+);
+
+
+
 const sun = new THREE.DirectionalLight(0xffffff, 1);
 scene.add(sun);
 sun.position.set(100, 100, 100);
