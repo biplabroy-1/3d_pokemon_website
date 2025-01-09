@@ -79,7 +79,7 @@ loader.load(
     console.error("Error loading avatar:", error);
   }
 );
-
+// charizard flying 
 loader.load(
   "./models/Charzard Flying.glb", // Path to your GLB file
   function (glb) {
@@ -97,7 +97,7 @@ loader.load(
     });
 
     // Position Charizard in the sky
-    charizard.position.set(0, 20, 0); // Adjust position as needed
+    charizard.position.set(0, 17, 0); // Adjust position as needed
     scene.add(charizard);
 
     console.log("Charizard loaded successfully!", charizard);
@@ -153,8 +153,8 @@ controls.maxPolarAngle = Math.PI / 2; // Limit to looking straight (90 degrees u
 controls.minPolarAngle = 0; // Prevent looking below the horizon (0 degrees)
 
 // Optional: Limit horizontal rotation (if needed)
-controls.minAzimuthAngle = -Math.PI / 2; // Left limit (-90 degrees)
-controls.maxAzimuthAngle = Math.PI / 2; // Right limit (90 degrees)
+// controls.minAzimuthAngle = -Math.PI / 2; // Left limit (-90 degrees)
+// controls.maxAzimuthAngle = Math.PI / 2; // Right limit (90 degrees)
 
 // Optional: Restrict zooming (if needed)
 // controls.minDistance = 50; // Minimum zoom distance
@@ -173,24 +173,41 @@ window.addEventListener("pointermove", (event) => {
 });
 
 function animateWings(charizard) {
-  const time = clock.getElapsedTime(); // Get time
+  const time = clock.getElapsedTime(); // Get elapsed time
 
-  // Get left and right wing base
-  const leftWing = charizard.getObjectByName("Wing_baseL");
-  const rightWing = charizard.getObjectByName("Wing_baseR");
+  // Get wing components
+  const leftWing1 = charizard.getObjectByName("Wing1L");
+  const leftWing2 = charizard.getObjectByName("Wing2L");
+  const leftWing3 = charizard.getObjectByName("Wing3L");
 
-  if (leftWing && rightWing) {
-    // Flap the wings by modifying their rotation
-    const flapAngle = (Math.cos(time * 3) * 5 + 50) * Math.PI * 0.1;
+  const rightWing1 = charizard.getObjectByName("Wing1R");
+  const rightWing2 = charizard.getObjectByName("Wing2R");
+  const rightWing3 = charizard.getObjectByName("Wing3R");
 
-    rightWing.rotation.x = -flapAngle; // Flap right wing (opposite direction)
-    leftWing.rotation.x = -flapAngle; // Flap right wing (opposite direction)
-    // You can add finer details by animating sub-components like Wing1L, Wing2R, etc.
-    const leftWing1 = charizard.getObjectByName("Wing1L");
-    const rightWing1 = charizard.getObjectByName("Wing1R");
-    if (leftWing1 && rightWing1) {
-      leftWing1.rotation.x = -flapAngle;
-      rightWing1.rotation.x = -flapAngle;
+  if (leftWing1 && rightWing1) {
+    // Use a sine wave to control the wing flapping
+    const flapFrequency = 3; // Controls the speed of flapping
+    const downstrokeAngle = Math.PI / 4; // Max angle for downstroke (45 degrees)
+    const upstrokeAngle = Math.PI / 12; // Max angle for upstroke (15 degrees)
+
+    // Calculate the flap angle
+    const flapAngle =
+      Math.sin(time * flapFrequency) > 0
+        ? Math.sin(time * flapFrequency) * downstrokeAngle
+        : Math.sin(time * flapFrequency) * upstrokeAngle;
+
+    // Apply flapping angles to sub-wing components
+    // leftWing1.rotation.y = flapAngle;
+    // rightWing1.rotation.y = flapAngle;
+
+    // Additional subcomponents for finer wing movement
+    if (leftWing2 && rightWing2) {
+      leftWing2.rotation.x = flapAngle * 2; // Delayed and smaller movement
+      rightWing2.rotation.x = flapAngle *2 ;
+    }
+    if (leftWing3 && rightWing3) {
+      leftWing3.rotation.z = flapAngle * 0.5; // Even smaller and delayed
+      rightWing3.rotation.z = flapAngle * 0.5;
     }
   }
 }
@@ -200,9 +217,10 @@ function animate() {
   time += 0.01;
   if (charizard) {
     animateWings(charizard);
+
     // Other animations (movement, rotation, etc.)
     charizard.position.y += Math.sin(clock.getElapsedTime()) * -0.1;
-    charizard.rotation.x = -150;
+    charizard.rotation.x = Math.PI / 6; // Forward tilt
   }
   raycaster.setFromCamera(pointer, camera);
 
@@ -226,3 +244,5 @@ function animate() {
 // Start the animation loop
 const clock = new THREE.Clock();
 renderer.setAnimationLoop(animate);
+
+// 4:18:00
