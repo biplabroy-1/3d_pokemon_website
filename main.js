@@ -304,7 +304,7 @@ class CharacterControl {
       var directionOffset = this.directionOffset(keyPressed);
       this.rotateQuarternion.setFromAxisAngle(
         this.rotateAngle,
-        angleYCameraDirection - directionOffset + Math.PI
+        angleYCameraDirection + directionOffset + Math.PI
       );
       this.avatar.quaternion.rotateTowards(this.rotateQuarternion, 0.2);
       this.camera.getWorldDirection(this.walkDirection);
@@ -337,9 +337,6 @@ class CharacterControl {
 
 
 
-
-
-
   directionOffset(keyPressed) {
     var directionOffset = 0;
 
@@ -367,23 +364,6 @@ class CharacterControl {
 
     return directionOffset;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
