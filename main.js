@@ -236,24 +236,24 @@ class CharacterControl {
 
     // Load Idle animation
     fbxLoader.load("./models/Idle.fbx", (fbx) => {
-      console.log("idle", fbx);
-      console.log("FBX Animations:", fbx.animations[0]);
+      // console.log("idle", fbx);
+      // console.log("FBX Animations:", fbx.animations[0]);
       this.mixer = new THREE.AnimationMixer(avatar);
       const idleAction = this.mixer.clipAction(fbx.animations[0]);
       idleAction.play();
       this.animationsMap.set("idle", idleAction);
     });
     fbxLoader.load("./models/Walking.fbx", (fbx) => {
-      console.log("Walking", fbx);
-      console.log("FBX Animations:", fbx.animations[0]);
+      // console.log("Walking", fbx);
+      // console.log("FBX Animations:", fbx.animations[0]);
       this.mixer = new THREE.AnimationMixer(avatar);
       const walkAction = this.mixer.clipAction(fbx.animations[0]);
       walkAction.play();
       this.animationsMap.set("Walk", walkAction);
     });
     fbxLoader.load("./models/Running.fbx", (fbx) => {
-      console.log("Running", fbx);
-      console.log("FBX Animations:", fbx.animations[0]);
+      // console.log("Running", fbx);
+      // console.log("FBX Animations:", fbx.animations[0]);
       this.mixer = new THREE.AnimationMixer(avatar);
       const runAction = this.mixer.clipAction(fbx.animations[0]);
       runAction.play();
