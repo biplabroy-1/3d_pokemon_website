@@ -8,6 +8,7 @@ const pointer = new THREE.Vector2();
 const scene = new THREE.Scene();
 const canvas = document.getElementById("canvas");
 let charizard; // Declare globally
+let characterControl;
 
 const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -48,7 +49,7 @@ loader.load(
   function (glb) {
     avatar = glb.scene;
     avatar.scale.set(2, 2, 2);
-    avatar.position.set(-3, 0, 45);
+    avatar.position.set(-3, 2, 45);
     avatar.rotation.set(0, Math.PI, 0);
     avatar.traverse((child) => {
       if (child.isMesh) {
@@ -58,40 +59,18 @@ loader.load(
     });
     scene.add(avatar);
 
-    const gltfAnimation = glb.animations;
+    // Create a single mixer for the avatar
     mixer = new THREE.AnimationMixer(avatar);
 
-    const animationsMap = new Map();
-    gltfAnimation
-      .filter((a) => a.name !== "TPose")
-      .forEach((a) => {
-        animationsMap.set(a.name, mixer.clipAction(a));
-      });
-
-    // Initialize characterControl properly
+    // Create CharacterControl instance with the mixer
     characterControl = new CharacterControl(
       avatar,
       mixer,
-      animationsMap,
+      new Map(),  // Empty map that will be populated by loadAnimations
       controls,
-      camera
-      // "Idle"
+      camera,
+      'idle'  // Set initial action to idle
     );
-    // Load the Running animation and apply it to the avatar
-    // fbxLoader.load(
-    //   "./models/Running.fbx",
-    //   function (fbx) {
-    //     // console.log("Running animation loaded:", fbx);
-
-    //     mixer = new THREE.AnimationMixer(avatar); // Create mixer for the avatar
-    //     const action = mixer.clipAction(fbx.animations[0]); // Use the first animation
-    //     action.play(); // Start the animation
-    //   },
-    //   undefined,
-    //   function (error) {
-    //     console.error("Error loading Running animation:", error);
-    //   }
-    // );
   },
   undefined,
   function (error) {
@@ -190,22 +169,13 @@ window.addEventListener("pointermove", (event) => {
   pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 });
 
-// const DIRECTIONS = ["KeyW", "KeyA", "KeyS", "KeyD", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"]; // WASD keys
 // OR for arrow keys:
 // const DIRECTIONS = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
 
 class CharacterControl {
-  constructor(
-    avatar,
-    mixer,
-    animationsMap = new Map(),
-    orbitControls,
-    camera,
-    currentAction
-  ) {
+  constructor(avatar, mixer, animationsMap = new Map(), orbitControls, camera, currentAction = 'idle') {
     this.avatar = avatar;
-    this.mixer = mixer;
-    // this.mixer = new THREE.AnimationMixer(avatar);
+    this.mixer = mixer;  // Use the mixer passed from the loader
     this.animationsMap = animationsMap;
     this.currentAction = currentAction;
     this.toggleRun = true;
@@ -216,62 +186,55 @@ class CharacterControl {
     this.rotateQuarternion = new THREE.Quaternion();
     this.cameraTarget = new THREE.Vector3();
     this.fadeDuration = 0.2;
-    this.runVelocity = 5;
-    this.walkVelocity = 2;
+    this.runVelocity = 150;
+    this.walkVelocity = 70;
+
+    // Initialize collision properties
+    this.collisionRays = [];
+    this.rayDirections = [
+      new THREE.Vector3(1, 0, 0),
+      new THREE.Vector3(-1, 0, 0),
+      new THREE.Vector3(0, 0, 1),
+      new THREE.Vector3(0, 0, -1),
+    ];
 
     // Load animations
     this.loadAnimations();
 
-    // Play the current action animation
-    this.animationsMap.forEach((value, key) => {
-      if (key === currentAction) {
-        value.play();
-      }
-    });
+    // Add ground detection properties
+    this.groundRaycaster = new THREE.Raycaster();
+    this.groundRaycaster.ray.direction.set(0, -1, 0); // Ray pointing down
+    this.minHeight = 0; // Minimum height the character can go
   }
 
-  // Load the FBX animations
   loadAnimations() {
-    // const loader = new THREE.FBXLoader();
-
-    // Load Idle animation
     fbxLoader.load("./models/Idle.fbx", (fbx) => {
-      // console.log("idle", fbx);
-      // console.log("FBX Animations:", fbx.animations[0]);
-      this.mixer = new THREE.AnimationMixer(avatar);
       const idleAction = this.mixer.clipAction(fbx.animations[0]);
-      idleAction.play();
+      idleAction.setLoop(THREE.LoopRepeat);
+      // idleAction.timeScale = 1.0;
       this.animationsMap.set("idle", idleAction);
+      idleAction.play();
     });
+
     fbxLoader.load("./models/Walking.fbx", (fbx) => {
-      // console.log("Walking", fbx);
-      // console.log("FBX Animations:", fbx.animations[0]);
-      this.mixer = new THREE.AnimationMixer(avatar);
       const walkAction = this.mixer.clipAction(fbx.animations[0]);
-      walkAction.play();
-      this.animationsMap.set("Walk", walkAction);
+      walkAction.setLoop(THREE.LoopRepeat);
+      // walkAction.timeScale = 2.0;
+      this.animationsMap.set("walk", walkAction);
     });
+
     fbxLoader.load("./models/Running.fbx", (fbx) => {
-      // console.log("Running", fbx);
-      // console.log("FBX Animations:", fbx.animations[0]);
-      this.mixer = new THREE.AnimationMixer(avatar);
       const runAction = this.mixer.clipAction(fbx.animations[0]);
-      runAction.play();
-      this.animationsMap.set("Running", runAction);
+      runAction.setLoop(THREE.LoopRepeat);
+      // runAction.timeScale = 2;
+      this.animationsMap.set("run", runAction);
     });
   }
 
-  // Toggle the run state
-  switchRunToggle() {
-    this.toggleRun = !this.toggleRun;
-  }
-
-  // Update logic for character
   update(delta, keyPressed) {
-    const DIRECTIONS = ["w", "a", "s", "d"]; // Example movement keys
-
-    const directionPressed = DIRECTIONS.some((key) => keyPressed[key] == true);
-    var play = "";
+    const directionPressed = ["w", "a", "s", "d"].some(key => keyPressed[key] === true);
+    
+    let play = "";
     if (directionPressed && this.toggleRun) {
       play = "run";
     } else if (directionPressed) {
@@ -280,7 +243,7 @@ class CharacterControl {
       play = "idle";
     }
 
-    if (this.currentAction != play) {
+    if (this.currentAction !== play) {
       const toPlay = this.animationsMap.get(play);
       const current = this.animationsMap.get(this.currentAction);
 
@@ -294,9 +257,8 @@ class CharacterControl {
       this.currentAction = play;
     }
 
-    this.mixer.update(delta);
-
-    if (this.currentAction == "run" || this.currentAction == "walk") {
+    if (this.currentAction === "run" || this.currentAction === "walk") {
+      // Movement code...
       var angleYCameraDirection = Math.atan2(
         this.camera.position.x - this.avatar.position.x,
         this.camera.position.z - this.avatar.position.z
@@ -312,15 +274,35 @@ class CharacterControl {
       this.walkDirection.normalize();
       this.walkDirection.applyAxisAngle(this.rotateAngle, directionOffset);
 
-      const velocity =
-        this.currentAction == "run" ? this.runVelocity : this.walkVelocity;
+      const velocity = this.currentAction === "run" ? this.runVelocity : this.walkVelocity;
+      const moveX = this.walkDirection.x * velocity * delta;
+      const moveZ = this.walkDirection.z * velocity * delta;
 
-      const moveX = this.walkDirection.x + velocity * delta;
-      const moveZ = this.walkDirection.z + velocity * delta;
-
+      const previousPosition = this.avatar.position.clone();
+      
+      // Update horizontal position
       this.avatar.position.x += moveX;
       this.avatar.position.z += moveZ;
-      this.updateCameraTarget(moveX, moveZ);
+
+      // Check and adjust ground height
+      const groundHeight = this.checkGround();
+      this.avatar.position.y = groundHeight;
+
+      // Check if new position is valid
+      if (this.checkCollisions()) {
+        this.avatar.position.copy(previousPosition);
+      } else {
+        this.updateCameraTarget(moveX, moveZ);
+      }
+    } else {
+      // Even when not moving, ensure character stays on ground
+      const groundHeight = this.checkGround();
+      this.avatar.position.y = groundHeight;
+    }
+
+    // Update the mixer
+    if (this.mixer) {
+      this.mixer.update(delta);
     }
   }
 
@@ -334,51 +316,91 @@ class CharacterControl {
     this.orbitControls.target = this.cameraTarget;
   }
 
-
-
-
   directionOffset(keyPressed) {
     var directionOffset = 0;
 
     if (keyPressed["w"]) {
-        if (keyPressed["a"]) {
-            directionOffset = Math.PI / 4; // Forward-left (45 degrees)
-        } else if (keyPressed["d"]) {
-            directionOffset = -Math.PI / 4; // Forward-right (-45 degrees)
-        } else {
-            directionOffset = 0; // Forward (0 degrees)
-        }
+      if (keyPressed["a"]) {
+        directionOffset = Math.PI / 4; // Forward-left (45 degrees)
+      } else if (keyPressed["d"]) {
+        directionOffset = -Math.PI / 4; // Forward-right (-45 degrees)
+      } else {
+        directionOffset = 0; // Forward (0 degrees)
+      }
     } else if (keyPressed["s"]) {
-        if (keyPressed["a"]) {
-            directionOffset = (3 * Math.PI) / 4; // Backward-left (135 degrees)
-        } else if (keyPressed["d"]) {
-            directionOffset = -(3 * Math.PI) / 4; // Backward-right (-135 degrees)
-        } else {
-            directionOffset = Math.PI; // Backward (180 degrees)
-        }
+      if (keyPressed["a"]) {
+        directionOffset = (3 * Math.PI) / 4; // Backward-left (135 degrees)
+      } else if (keyPressed["d"]) {
+        directionOffset = -(3 * Math.PI) / 4; // Backward-right (-135 degrees)
+      } else {
+        directionOffset = Math.PI; // Backward (180 degrees)
+      }
     } else if (keyPressed["a"]) {
-        directionOffset = Math.PI / 2; // Left (90 degrees)
+      directionOffset = Math.PI / 2; // Left (90 degrees)
     } else if (keyPressed["d"]) {
-        directionOffset = -Math.PI / 2; // Right (-90 degrees)
+      directionOffset = -Math.PI / 2; // Right (-90 degrees)
     }
 
     return directionOffset;
+  }
+
+  // Add this new method to check collisions
+  checkCollisions() {
+    const collisionObjects = scene.children.filter(
+      (obj) => obj !== this.avatar && obj.type === "Group" // Adjust based on your 3D objects' types
+    );
+
+    for (let ray of this.collisionRays) {
+      // Update raycaster position to avatar's current position
+      ray.ray.origin.copy(this.avatar.position);
+
+      const intersects = ray.intersectObjects(collisionObjects, true);
+
+      if (intersects.length > 0 && intersects[0].distance < 1) {
+        return true; // Collision detected
+      }
+    }
+    return false;
+  }
+
+  // Add this method to CharacterControl class
+  debugCollisionRays() {
+    // Remove old debug arrows if they exist
+    scene.children = scene.children.filter((child) => !child.isArrowHelper);
+
+    // Create new debug arrows
+    this.collisionRays.forEach((ray) => {
+      const arrow = new THREE.ArrowHelper(
+        ray.ray.direction,
+        ray.ray.origin,
+        1, // length
+        0xff0000 // color
+      );
+      scene.add(arrow);
+    });
+  }
+
+  // Add this new method to check ground height
+  checkGround() {
+    if (!this.avatar) return this.minHeight;
+
+    // Cast ray downward from character position
+    this.groundRaycaster.ray.origin.copy(this.avatar.position);
+    this.groundRaycaster.ray.origin.y += 2; // Start ray from above character
+
+    const groundObjects = scene.children.filter(
+      obj => obj !== this.avatar && obj.type === "Group"
+    );
+
+    const intersects = this.groundRaycaster.intersectObjects(groundObjects, true);
+    
+    if (intersects.length > 0) {
+      return Math.max(intersects[0].point.y, this.minHeight);
+    }
+    
+    return this.minHeight;
+  }
 }
-
-
-
-
-
-}
-
-var characterControl = new CharacterControl(
-  avatar,
-  mixer,
-  new Map(),
-  OrbitControls,
-  camera,
-  "idle"
-);
 
 const keyPressed = {};
 
@@ -462,11 +484,12 @@ function animate() {
   }
 
   const delta = clock.getDelta(); // Get time elapsed since the last frame
+
   if (characterControl && mixer) {
-    characterControl.update(delta, keyPressed); // Update character control
+    characterControl.update(delta, keyPressed);
   }
 
-  if (mixer) mixer.update(delta); // Update animation mixer
+  if (mixer) mixer.update(delta);
 
   // Update controls
   controls.update();
@@ -478,5 +501,3 @@ function animate() {
 // Start the animation loop
 const clock = new THREE.Clock();
 renderer.setAnimationLoop(animate);
-
-// 4:18:00
