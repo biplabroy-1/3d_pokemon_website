@@ -94,7 +94,7 @@ loader.load(
     });
 
     // Position Charizard in the sky
-    charizard.position.set(0, 17, 0); // Adjust position as needed
+    charizard.position.set(0, 20, 0); // Adjust position as needed
     scene.add(charizard);
 
     // console.log("Charizard loaded successfully!", charizard);
@@ -107,6 +107,113 @@ loader.load(
     console.error("Error loading Charizard:", error);
   }
 );
+
+// Load Phantump model
+let phantump;
+loader.load(
+  "./models/phantump_shiny.glb",
+  function (glb) {
+    phantump = glb.scene;
+    
+    // Scale the model appropriately
+    phantump.scale.set(0.01, 0.01, 0.01);
+    
+    // Position Phantump in the scene
+    phantump.position.set(3, 5, 9); // Adjust position as needed
+    
+    // Enable shadows
+    phantump.traverse((child) => {
+      if (child.isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+    });
+
+    scene.add(phantump);
+    
+    // Optional: Add some floating animation
+    const floatAnimation = () => {
+      if (phantump) {
+        // phantump.position.y += Math.sin(clock.getElapsedTime()) * 0.005;
+        requestAnimationFrame(floatAnimation);
+      }
+    };
+    floatAnimation();
+
+  },
+  undefined,
+  function (error) {
+    console.error("Error loading Phantump:", error);
+  }
+);
+
+// Load Salamence model
+let salamence;
+loader.load(
+  "./models/salamence.glb",
+  function (glb) {
+    salamence = glb.scene;
+    // Scale the model appropriately
+    salamence.scale.set(0.3, 0.3, 0.3);
+    // Position Salamence in the scene - placing it in the air since it's a flying Pokémon
+    salamence.position.set(-30, 16, 25);
+    // Add slight rotation for dynamic pose
+    salamence.rotation.set(0, Math.PI* 2/ 3, 0); // 90-degree rotation around Y axis
+    // Enable shadows
+    salamence.traverse((child) => {
+      if (child.isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+    });
+    scene.add(salamence);
+  },
+  undefined,
+  function (error) {
+    console.error("Error loading Salamence:", error);
+  }
+);
+
+let Bulbasaur;
+loader.load("./models/bulbasaur.glb", function (glb){
+  Bulbasaur = glb.scene;
+  Bulbasaur.scale.set(3, 3, 3);
+  Bulbasaur.position.set(13, 0, 22);
+  Bulbasaur.rotation.set(0, 0, 0);
+  Bulbasaur.traverse((child) => {
+    if (child.isMesh) {
+      child.castShadow = true;
+      child.receiveShadow = true;
+    }
+  });
+  scene.add(Bulbasaur);
+},
+undefined,
+function (error) {
+  console.error("Error loading Bulbasaur:", error);
+}
+);
+let Lukario;
+loader.load("./models/lucario_and_riolu_toy_edition.glb", function (glb){
+  Lukario = glb.scene;
+  Lukario.scale.set(2, 2, 2);
+  Lukario.position.set(-27,6.5, 6);
+  Lukario.rotation.set(0, Math.PI /3, 0);
+  Lukario.traverse((child) => {
+    if (child.isMesh) {
+      child.castShadow = true;
+      child.receiveShadow = true;
+    }
+  });
+  scene.add( Lukario);
+},
+undefined,
+function (error) {
+  console.error("Error loading Lukario:", error);
+}
+);
+
+
 
 const sun = new THREE.DirectionalLight(0xffffff, 1);
 scene.add(sun);
@@ -189,13 +296,16 @@ class CharacterControl {
     this.runVelocity = 150;
     this.walkVelocity = 70;
 
-    // Initialize collision properties
+    // Add character height property
+    this.characterHeight = 4; // Adjust this based on your character's actual height
+    
+    // Modify collision rays to include height check
     this.collisionRays = [];
     this.rayDirections = [
-      new THREE.Vector3(1, 0, 0),
-      new THREE.Vector3(-1, 0, 0),
-      new THREE.Vector3(0, 0, 1),
-      new THREE.Vector3(0, 0, -1),
+      { direction: new THREE.Vector3(1, 0, 0), height: this.characterHeight / 2 },
+      { direction: new THREE.Vector3(-1, 0, 0), height: this.characterHeight / 2 },
+      { direction: new THREE.Vector3(0, 0, 1), height: this.characterHeight / 2 },
+      { direction: new THREE.Vector3(0, 0, -1), height: this.characterHeight / 2 },
     ];
 
     // Load animations
@@ -211,7 +321,7 @@ class CharacterControl {
     fbxLoader.load("./models/Idle.fbx", (fbx) => {
       const idleAction = this.mixer.clipAction(fbx.animations[0]);
       idleAction.setLoop(THREE.LoopRepeat);
-      // idleAction.timeScale = 1.0;
+      idleAction.timeScale = 1.0;  // Normal speed for idle
       this.animationsMap.set("idle", idleAction);
       idleAction.play();
     });
@@ -219,14 +329,14 @@ class CharacterControl {
     fbxLoader.load("./models/Walking.fbx", (fbx) => {
       const walkAction = this.mixer.clipAction(fbx.animations[0]);
       walkAction.setLoop(THREE.LoopRepeat);
-      // walkAction.timeScale = 2.0;
+      walkAction.timeScale = 1.0;  // 3x faster walking animation
       this.animationsMap.set("walk", walkAction);
     });
 
     fbxLoader.load("./models/Running.fbx", (fbx) => {
       const runAction = this.mixer.clipAction(fbx.animations[0]);
       runAction.setLoop(THREE.LoopRepeat);
-      // runAction.timeScale = 2;
+      runAction.timeScale = 4.0;  // 4x faster running animation
       this.animationsMap.set("run", runAction);
     });
   }
@@ -344,37 +454,61 @@ class CharacterControl {
     return directionOffset;
   }
 
-  // Add this new method to check collisions
+  // Modify the collision check method
   checkCollisions() {
+    if (!this.avatar) return false;
+
     const collisionObjects = scene.children.filter(
-      (obj) => obj !== this.avatar && obj.type === "Group" // Adjust based on your 3D objects' types
+      obj => obj !== this.avatar && obj.type === "Group"
     );
 
-    for (let ray of this.collisionRays) {
-      // Update raycaster position to avatar's current position
-      ray.ray.origin.copy(this.avatar.position);
-
-      const intersects = ray.intersectObjects(collisionObjects, true);
-
-      if (intersects.length > 0 && intersects[0].distance < 1) {
-        return true; // Collision detected
+    // Create raycasters for each direction
+    for (let rayInfo of this.rayDirections) {
+      const raycaster = new THREE.Raycaster();
+      
+      // Set raycaster origin at half character height
+      const rayOrigin = this.avatar.position.clone();
+      rayOrigin.y += rayInfo.height;
+      
+      raycaster.set(rayOrigin, rayInfo.direction);
+      
+      const intersects = raycaster.intersectObjects(collisionObjects, true);
+      
+      if (intersects.length > 0) {
+        const collision = intersects[0];
+        
+        // Check if collision distance is within range
+        if (collision.distance < 0.8) {  // Reduced collision distance
+          const objectHeight = this.calculateObjectHeight(collision.object);
+          if (objectHeight > this.characterHeight * 0.75) {  // Increased height requirement
+            return true;
+          }
+        }
       }
     }
     return false;
   }
 
-  // Add this method to CharacterControl class
-  debugCollisionRays() {
-    // Remove old debug arrows if they exist
-    scene.children = scene.children.filter((child) => !child.isArrowHelper);
+  // Add method to calculate object height
+  calculateObjectHeight(object) {
+    const bbox = new THREE.Box3().setFromObject(object);
+    const height = bbox.max.y - bbox.min.y;
+    return height;
+  }
 
-    // Create new debug arrows
-    this.collisionRays.forEach((ray) => {
+  // Update the debug visualization if needed
+  debugCollisionRays() {
+    scene.children = scene.children.filter(child => !child.isArrowHelper);
+    
+    this.rayDirections.forEach(rayInfo => {
+      const origin = this.avatar.position.clone();
+      origin.y += rayInfo.height;
+      
       const arrow = new THREE.ArrowHelper(
-        ray.ray.direction,
-        ray.ray.origin,
-        1, // length
-        0xff0000 // color
+        rayInfo.direction,
+        origin,
+        1,
+        0xff0000
       );
       scene.add(arrow);
     });
