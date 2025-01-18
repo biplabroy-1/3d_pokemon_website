@@ -8,6 +8,7 @@ const pointer = new THREE.Vector2();
 const scene = new THREE.Scene();
 const canvas = document.getElementById("canvas");
 let characterControl;
+let signboard;
 
 const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -20,436 +21,109 @@ const fbxLoader = new FBXLoader();
 
 let mixer; // Declare mixer for animation
 
-// Load the mystical forest model
-loader.load(
-  "./models/mystical_forest_cartoon.glb",
-  function (glb) {
-    // console.log("Mystical forest loaded:", glb);
-    const model = glb.scene;
-    model.scale.set(0.01, 0.01, 0.01);
-    glb.scene.traverse((child) => {
+// Create loading screen elements
+const loadingScreen = document.createElement('div');
+loadingScreen.id = 'loadingScreen';
+loadingScreen.style.position = 'fixed';
+loadingScreen.style.top = '0';
+loadingScreen.style.left = '0';
+loadingScreen.style.width = '100%';
+loadingScreen.style.height = '100%';
+loadingScreen.style.backgroundColor = 'rgba(0, 0, 0, 1)';
+loadingScreen.style.color = 'white';
+loadingScreen.style.display = 'flex';
+loadingScreen.style.flexDirection = 'column';
+loadingScreen.style.justifyContent = 'center';
+loadingScreen.style.alignItems = 'center';
+loadingScreen.style.fontSize = '24px';
+loadingScreen.innerHTML = 'Loading 0%';
+document.body.appendChild(loadingScreen);
+
+let loadedModels = 0;
+const totalModels = 17; // Update this count based on the total number of models
+
+function updateLoadingScreen() {
+  loadedModels++;
+  const progress = Math.floor((loadedModels / totalModels) * 100);
+  loadingScreen.innerHTML = `Loading ${progress}%`;
+  if (loadedModels === totalModels) {
+    setTimeout(() => {
+      loadingScreen.style.transition = 'opacity 1s ease-out, transform 1s ease-out';
+      loadingScreen.style.opacity = '0';
+      loadingScreen.style.transform = 'translateY(-100%)';
+      setTimeout(() => {
+        loadingScreen.style.display = 'none';
+      }, 1000);
+    }, 500);
+  }
+}
+
+const models = [
+  { path: "./models/mystical_forest_cartoon.glb", scale: 0.01, position: [0, 0, 0], rotation: [0, 0, 0] },
+  { path: "./models/my_avatar.glb", scale: 2, position: [-3, 2, 50], rotation: [0, Math.PI, 0], isAvatar: true },
+  { path: "./models/Charzard Flying.glb", scale: 3, position: [0, 20, 0], rotation: [0, 0, 0], isCharizard: true },
+  { path: "./models/phantump_shiny.glb", scale: 0.01, position: [3, 5, 9], rotation: [0, 0, 0] },
+  { path: "./models/salamence.glb", scale: 0.3, position: [-30, 16, 27], rotation: [0, (Math.PI * 2) / 3, 0] },
+  { path: "./models/bulbasaur.glb", scale: 2, position: [13, -0.5, 22], rotation: [0, 0, 0] },
+  { path: "./models/lucario_and_riolu_toy_edition.glb", scale: 2, position: [-27, 6.5, 6], rotation: [0, Math.PI / 3, 0] },
+  { path: "./models/eevee.glb", scale: 3.5, position: [7, 0, 10], rotation: [0, 0, 0] },
+  { path: "./models/pikachu.glb", scale: 0.03, position: [5, 0, 10], rotation: [0, 0, 0] },
+  { path: "./models/umbreon.glb", scale: 3, position: [6, 0, 10], rotation: [0, 0, 0] },
+  { path: "./models/pidgey.glb", scale: 0.4, position: [-2.5, 7, 32], rotation: [0, Math.PI, 0] },
+  { path: "./models/arcanine.glb", scale: 1, position: [10, 3.2, 29], rotation: [0, (-Math.PI * 3) / 4, 0] },
+  { path: "./models/ssbb_pokemon_trainer.glb", scale: 0.4, position: [-14, 3, 21], rotation: [0, Math.PI / 2, 0], isTrainer: true },
+  { path: "./models/plakia.glb", scale: 0.6, position: [-32, 23, -19], rotation: [0, Math.PI / 2, 0] },
+  { path: "./models/entei.glb", scale: 0.4, position: [-25, 15.5, -4], rotation: [0, Math.PI / 2, 0] },
+  { path: "./models/reshiram.glb", scale: 3.5, position: [60, 23, -14], rotation: [0, -Math.PI / 4, 0] },
+  { path: "./models/old_medieval_sign_board.glb", scale: 7, position: [3, 0, 44], rotation: [0, 0, 0], isSignboard: true }
+];
+
+models.forEach(model => {
+  loader.load(model.path, function (glb) {
+    const obj = glb.scene;
+    obj.scale.set(...Array(3).fill(model.scale));
+    obj.position.set(...model.position);
+    obj.rotation.set(...model.rotation);
+    obj.traverse(child => {
       if (child.isMesh) {
         child.castShadow = true;
         child.receiveShadow = true;
       }
     });
-    scene.add(glb.scene);
-  },
-  undefined,
-  function (error) {
-    console.error("Error loading mystical forest:", error);
-  }
-);
+    scene.add(obj);
 
-// Load the avatar model
-let avatar;
-loader.load(
-  "./models/my_avatar.glb",
-  function (glb) {
-    avatar = glb.scene;
-    avatar.scale.set(2, 2, 2);
-    avatar.position.set(-3, 2, 50);
-    avatar.rotation.set(0, Math.PI, 0);
-    avatar.traverse((child) => {
-      if (child.isMesh) {
-        child.castShadow = true;
-        child.receiveShadow = true;
-      }
-    });
-    scene.add(avatar);
+    if (model.isAvatar) {
+      mixer = new THREE.AnimationMixer(obj);
+      characterControl = new CharacterControl(obj, mixer, new Map(), controls, camera, "idle");
+    }
 
-    // Create a single mixer for the avatar
-    mixer = new THREE.AnimationMixer(avatar);
+    if (model.isCharizard) {
+      charizard = obj; // Assign charizard
+      obj.initialY = obj.position.y;
+    }
 
-    // Create CharacterControl instance with the mixer
-    characterControl = new CharacterControl(
-      avatar,
-      mixer,
-      new Map(), // Empty map that will be populated by loadAnimations
-      controls,
-      camera,
-      "idle" // Set initial action to idle
-    );
-  },
-  undefined,
-  function (error) {
-    console.error("Error loading avatar:", error);
-  }
-);
+    if (model.isTrainer) {
+      obj.traverse(child => {
+        if (child.isMesh) {
+          child.material = new THREE.MeshPhongMaterial({ color: 0x00010d });
+        }
+      });
+    }
+
+    if (model.isSignboard) {
+      signboard = obj; // Assign signboard
+      createHoveringArrow();
+    }
+
+    updateLoadingScreen(); // Update loading screen progress
+  }, undefined, function (error) {
+    console.error(`Error loading ${model.path}:`, error);
+    updateLoadingScreen(); // Update loading screen progress even if there's an error
+  });
+});
+
 // charizard flying
 let charizard; // Declare globally
-loader.load(
-  "./models/Charzard Flying.glb", // Path to your GLB file
-  function (glb) {
-    charizard = glb.scene;
-    charizard.scale.set(3, 3, 3);
-    charizard.traverse((child) => {
-      if (child.isMesh) {
-        child.castShadow = true;
-        child.receiveShadow = true;
-      }
-    });
-
-    // Store initial position
-    charizard.position.set(0, 20, 0);
-    charizard.initialY = charizard.position.y; // Store initial Y position
-    scene.add(charizard);
-
-    // console.log("Charizard loaded successfully!", charizard);
-    charizard.getObjectByName("Armature").traverse((child) => {
-      // console.log("charizard components: ", child.name); // Log all child object names
-    });
-  },
-  undefined,
-  function (error) {
-    console.error("Error loading Charizard:", error);
-  }
-);
-
-// Load Phantump model
-let phantump;
-loader.load(
-  "./models/phantump_shiny.glb",
-  function (glb) {
-    phantump = glb.scene;
-
-    // Scale the model appropriately
-    phantump.scale.set(0.01, 0.01, 0.01);
-
-    // Position Phantump in the scene
-    phantump.position.set(3, 5, 9); // Adjust position as needed
-
-    // Enable shadows
-    phantump.traverse((child) => {
-      if (child.isMesh) {
-        child.castShadow = true;
-        child.receiveShadow = true;
-      }
-    });
-
-    scene.add(phantump);
-
-    // Optional: Add some floating animation
-    const floatAnimation = () => {
-      if (phantump) {
-        // phantump.position.y += Math.sin(clock.getElapsedTime()) * 0.005;
-        requestAnimationFrame(floatAnimation);
-      }
-    };
-    floatAnimation();
-  },
-  undefined,
-  function (error) {
-    console.error("Error loading Phantump:", error);
-  }
-);
-
-// Load Salamence model
-let salamence;
-loader.load(
-  "./models/salamence.glb",
-  function (glb) {
-    salamence = glb.scene;
-    // Scale the model appropriately
-    salamence.scale.set(0.3, 0.3, 0.3);
-    // Position Salamence in the scene - placing it in the air since it's a flying Pokémon
-    salamence.position.set(-30, 16, 27);
-    // Add slight rotation for dynamic pose
-    salamence.rotation.set(0, (Math.PI * 2) / 3, 0); // 90-degree rotation around Y axis
-    // Enable shadows
-    salamence.traverse((child) => {
-      if (child.isMesh) {
-        child.castShadow = true;
-        child.receiveShadow = true;
-      }
-    });
-    scene.add(salamence);
-  },
-  undefined,
-  function (error) {
-    console.error("Error loading Salamence:", error);
-  }
-);
-
-let Bulbasaur;
-loader.load(
-  "./models/bulbasaur.glb",
-  function (glb) {
-    Bulbasaur = glb.scene;
-    Bulbasaur.scale.set(2, 2, 2);
-    Bulbasaur.position.set(13, -0.5, 22);
-    Bulbasaur.rotation.set(0, 0, 0);
-    Bulbasaur.traverse((child) => {
-      if (child.isMesh) {
-        child.castShadow = true;
-        child.receiveShadow = true;
-      }
-    });
-    scene.add(Bulbasaur);
-  },
-  undefined,
-  function (error) {
-    console.error("Error loading Bulbasaur:", error);
-  }
-);
-
-let Lukario;
-loader.load(
-  "./models/lucario_and_riolu_toy_edition.glb",
-  function (glb) {
-    Lukario = glb.scene;
-    Lukario.scale.set(2, 2, 2);
-    Lukario.position.set(-27, 6.5, 6);
-    Lukario.rotation.set(0, Math.PI / 3, 0);
-    Lukario.traverse((child) => {
-      if (child.isMesh) {
-        child.castShadow = true;
-        child.receiveShadow = true;
-      }
-    });
-    scene.add(Lukario);
-  },
-  undefined,
-  function (error) {
-    console.error("Error loading Lukario:", error);
-  }
-);
-
-let eevee;
-loader.load(
-  "./models/eevee.glb",
-  function (glb) {
-    eevee = glb.scene;
-    eevee.scale.set(3.5, 3.5, 3.5);
-    eevee.position.set(7, 0, 10);
-    eevee.rotation.set(0, 0, 0);
-    eevee.traverse((child) => {
-      if (child.isMesh) {
-        child.castShadow = true;
-        child.receiveShadow = true;
-      }
-    });
-    scene.add(eevee);
-  },
-  undefined,
-  function (error) {
-    console.error("Error loading eevee:", error);
-  }
-);
-
-let Pikachu;
-loader.load(
-  "./models/pikachu.glb",
-  function (glb) {
-    Pikachu = glb.scene;
-    Pikachu.scale.set(0.03, 0.03, 0.03);
-    Pikachu.position.set(5, 0, 10);
-    Pikachu.rotation.set(0, 0, 0);
-    Pikachu.traverse((child) => {
-      if (child.isMesh) {
-        child.castShadow = true;
-        child.receiveShadow = true;
-      }
-    });
-    scene.add(Pikachu);
-  },
-  undefined,
-  function (error) {
-    console.error("Error loading Pikachu:", error);
-  }
-);
-
-let umbreon;
-loader.load(
-  "./models/umbreon.glb",
-  function (glb) {
-    umbreon = glb.scene;
-    umbreon.scale.set(3, 3, 3);
-    umbreon.position.set(6, 0, 10);
-    umbreon.rotation.set(0, 0, 0);
-    umbreon.traverse((child) => {
-      if (child.isMesh) {
-        child.castShadow = true;
-        child.receiveShadow = true;
-      }
-    });
-    scene.add(umbreon);
-  },
-  undefined,
-  function (error) {
-    console.error("Error loading umbreon:", error);
-  }
-);
-
-let pidgey;
-loader.load(
-  "./models/pidgey.glb",
-  function (glb) {
-    pidgey = glb.scene;
-    pidgey.scale.set(0.4, 0.4, 0.4);
-    pidgey.position.set(-2.5, 7, 32);
-    pidgey.rotation.set(0, Math.PI, 0);
-    pidgey.traverse((child) => {
-      if (child.isMesh) {
-        child.castShadow = true;
-        child.receiveShadow = true;
-      }
-    });
-    scene.add(pidgey);
-  },
-  undefined,
-  function (error) {
-    console.error("Error loading pidgey:", error);
-  }
-);
-
-let arcanine;
-loader.load(
-  "./models/arcanine.glb",
-  function (glb) {
-    arcanine = glb.scene;
-    arcanine.scale.set(1, 1, 1);
-    arcanine.position.set(10, 3.2, 29);
-    arcanine.rotation.set(0, (-Math.PI * 3) / 4, 0);
-    arcanine.traverse((child) => {
-      if (child.isMesh) {
-        child.castShadow = true;
-        child.receiveShadow = true;
-      }
-    });
-    scene.add(arcanine);
-  },
-  undefined,
-  function (error) {
-    console.error("Error loading arcanine:", error);
-  }
-);
-
-let trainer_statue;
-loader.load(
-  "./models/ssbb_pokemon_trainer.glb",
-  function (glb) {
-    trainer_statue = glb.scene;
-    trainer_statue.scale.set(0.4, 0.4, 0.4);
-    trainer_statue.position.set(-14, 3, 21);
-    trainer_statue.rotation.set(0, Math.PI/2, 0);
-    
-    // Add color to the trainer statue
-    trainer_statue.traverse((child) => {
-      if (child.isMesh) {
-        // Create a new material with dark blue color
-        child.material = new THREE.MeshPhongMaterial({
-          color: 0x00010d,  // Dark blue color
-          // shininess: 30,    // Add some shininess
-          // specular: 0x111111  // Slight specular highlight
-        });
-        
-        child.castShadow = true;
-        child.receiveShadow = true;
-      }
-    });
-    
-    scene.add(trainer_statue);
-  },
-  undefined,
-  function (error) {
-    console.error("Error loading trainer_statue:", error);
-  }
-);
-let plakia;
-loader.load(
-  "./models/plakia.glb",
-  function (glb) {
-    plakia = glb.scene;
-    plakia.scale.set(0.6, 0.6, 0.6);
-    plakia.position.set(-32, 23, -19);
-    plakia.rotation.set(0, Math.PI/2, 0);
-    plakia.traverse((child) => {
-      if (child.isMesh) {
-        child.castShadow = true;
-        child.receiveShadow = true;
-      }
-    });
-    scene.add(plakia);
-  },
-  undefined,
-  function (error) {
-    console.error("Error loading plakia:", error);
-  }
-);
-
-let entei;
-loader.load(
-  "./models/entei.glb",
-  function (glb) {
-    entei = glb.scene;
-    entei.scale.set(0.4, 0.4, 0.4);
-    entei.position.set(-25, 15.5, -4);
-    entei.rotation.set(0, Math.PI/2, 0);
-    entei.traverse((child) => {
-      if (child.isMesh) {
-        child.castShadow = true;
-        child.receiveShadow = true;
-      }
-    });
-    scene.add(entei);
-  },
-  undefined,
-  function (error) {
-    console.error("Error loading entei:", error);
-  }
-);
-
-
-let reshiram;
-loader.load(
-  "./models/reshiram.glb",
-  function (glb) {
-    reshiram = glb.scene;
-    reshiram.scale.set(3.5, 3.5, 3.5);
-    reshiram.position.set(60, 23, -14);
-    reshiram.rotation.set(0, -Math.PI/4, 0);
-    reshiram.traverse((child) => {
-      if (child.isMesh) {
-        child.castShadow = true;
-        child.receiveShadow = true;
-      }
-    });
-    scene.add(reshiram);
-  },
-  undefined,
-  function (error) {
-    console.error("Error loading reshiram:", error);
-  }
-);
-
-
-
-
-let signboard;
-loader.load(
-  "./models/old_medieval_sign_board.glb",
-  function (glb) {
-    signboard = glb.scene;
-    signboard.scale.set(7, 7, 7);
-    signboard.position.set(3, 0, 44);
-    signboard.rotation.set(0, 0, 0);
-    signboard.traverse((child) => {
-      if (child.isMesh) {
-        child.castShadow = true;
-        child.receiveShadow = true;
-      }
-    });
-    scene.add(signboard);
-    
-    // Create the hovering arrow after signboard is loaded
-    createHoveringArrow();
-  },
-  undefined,
-  function (error) {
-    console.error("Error loading signboard:", error);
-  }
-);
 
 // Add this function to create and show popup
 function showPopup() {
@@ -516,11 +190,11 @@ sun.shadow.camera.bottom = -50;
 sun.shadow.mapSize.width = 2048; // Increase for sharper shadows
 sun.shadow.mapSize.height = 2048;
 
-const helper = new THREE.DirectionalLightHelper(sun, 10);
-scene.add(helper);
+// const helper = new THREE.DirectionalLightHelper(sun, 10);
+// scene.add(helper);
 
-const ShadowCamera = new THREE.CameraHelper(sun.shadow.camera);
-scene.add(ShadowCamera);
+// const ShadowCamera = new THREE.CameraHelper(sun.shadow.camera);
+// scene.add(ShadowCamera);
 // console.log("Shadow info:", sun.shadow);
 
 const light = new THREE.AmbientLight(0x404040, 3); // Soft white light
@@ -627,26 +301,20 @@ class CharacterControl {
   }
 
   loadAnimations() {
-    fbxLoader.load("./models/Idle.fbx", (fbx) => {
-      const idleAction = this.mixer.clipAction(fbx.animations[0]);
-      idleAction.setLoop(THREE.LoopRepeat);
-      idleAction.timeScale = 1.0; // Normal speed for idle
-      this.animationsMap.set("idle", idleAction);
-      idleAction.play();
-    });
+    const animations = [
+      { path: "./models/Idle.fbx", name: "idle", timeScale: 1.0 },
+      { path: "./models/Walking.fbx", name: "walk", timeScale: 1.0 },
+      { path: "./models/Running.fbx", name: "run", timeScale: 4.0 }
+    ];
 
-    fbxLoader.load("./models/Walking.fbx", (fbx) => {
-      const walkAction = this.mixer.clipAction(fbx.animations[0]);
-      walkAction.setLoop(THREE.LoopRepeat);
-      walkAction.timeScale = 1.0; // 3x faster walking animation
-      this.animationsMap.set("walk", walkAction);
-    });
-
-    fbxLoader.load("./models/Running.fbx", (fbx) => {
-      const runAction = this.mixer.clipAction(fbx.animations[0]);
-      runAction.setLoop(THREE.LoopRepeat);
-      runAction.timeScale = 4.0; // 4x faster running animation
-      this.animationsMap.set("run", runAction);
+    animations.forEach(anim => {
+      fbxLoader.load(anim.path, (fbx) => {
+        const action = this.mixer.clipAction(fbx.animations[0]);
+        action.setLoop(THREE.LoopRepeat);
+        action.timeScale = anim.timeScale;
+        this.animationsMap.set(anim.name, action);
+        if (anim.name === "idle") action.play();
+      });
     });
   }
 
@@ -812,19 +480,19 @@ class CharacterControl {
 
   // Update the debug visualization if needed
   debugCollisionRays() {
-    scene.children = scene.children.filter((child) => !child.isArrowHelper);
+    // scene.children = scene.children.filter((child) => !child.isArrowHelper);
 
     this.rayDirections.forEach((rayInfo) => {
       const origin = this.avatar.position.clone();
       origin.y += rayInfo.height;
 
-      const arrow = new THREE.ArrowHelper(
-        rayInfo.direction,
-        origin,
-        1,
-        0xff0000
-      );
-      scene.add(arrow);
+      // const arrow = new THREE.ArrowHelper(
+      //   rayInfo.direction,
+      //   origin,
+      //   1,
+      //   0xff0000
+      // );
+      // scene.add(arrow);
     });
   }
 
