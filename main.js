@@ -66,6 +66,7 @@ document.body.appendChild(loadingScreen);
 let loadedModels = 0;
 const totalModels = 17; // Update this count based on the total number of models
 let currentProgress = 0; // Track current progress for smooth transition
+let loadingComplete = false; // Track if loading is complete
 
 function updateLoadingScreen() {
   loadedModels++;
@@ -86,6 +87,7 @@ function updateLoadingScreen() {
           loadingScreen.style.transform = 'translateY(-100%)';
           setTimeout(() => {
             loadingScreen.style.display = 'none';
+            loadingComplete = true; // Set loading complete to true
           }, 1000);
         }, 500);
       }
@@ -561,10 +563,12 @@ const keyPressed = {};
 document.addEventListener(
   "keydown",
   (event) => {
-    if (event.shiftKey && characterControl) {
-      characterControl.switchRunToggle();
-    } else {
-      keyPressed[event.key.toLowerCase()] = true;
+    if (loadingComplete) { // Only allow key events if loading is complete
+      if (event.shiftKey && characterControl) {
+        characterControl.switchRunToggle();
+      } else {
+        keyPressed[event.key.toLowerCase()] = true;
+      }
     }
   },
   false
@@ -573,7 +577,9 @@ document.addEventListener(
 document.addEventListener(
   "keyup",
   (event) => {
-    keyPressed[event.key.toLowerCase()] = false;
+    if (loadingComplete) { // Only allow key events if loading is complete
+      keyPressed[event.key.toLowerCase()] = false;
+    }
   },
   false
 );
