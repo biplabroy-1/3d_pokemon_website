@@ -111,8 +111,9 @@ const models = [
   { path: "./models/ssbb_pokemon_trainer.glb", scale: 0.4, position: [-14, 3, 21], rotation: [0, Math.PI / 2, 0], isTrainer: true },
   { path: "./models/plakia.glb", scale: 0.6, position: [-32, 23, -19], rotation: [0, Math.PI / 2, 0] },
   { path: "./models/entei.glb", scale: 0.4, position: [-25, 15.5, -4], rotation: [0, Math.PI / 2, 0] },
+  // { path: "./models/reshiram.glb", scale: 3.5, position: [60, 23, -50], rotation: [0, -Math.PI / 4, 0] },
   { path: "./models/reshiram.glb", scale: 3.5, position: [60, 23, -14], rotation: [0, -Math.PI / 4, 0] },
-  { path: "./models/old_medieval_sign_board.glb", scale: 7, position: [3, 0, 44], rotation: [0, 0, 0], isSignboard: true }
+  { path: "./models/old_medieval_sign_board.glb", scale: 7, position: [3, 0, 44], rotation: [0, 0, 0], isSignboard: true },
 ];
 
 models.forEach(model => {
@@ -411,6 +412,13 @@ class CharacterControl {
       this.avatar.position.x += moveX;
       this.avatar.position.z += moveZ;
 
+      // Restrict movement within z bounds
+      if (this.avatar.position.z < -50) {
+        this.avatar.position.z = -50;
+      } else if (this.avatar.position.z > 50) {
+        this.avatar.position.z = 50;
+      }
+
       // Check and adjust ground height
       const groundHeight = this.checkGround();
       this.avatar.position.y = groundHeight;
@@ -427,6 +435,20 @@ class CharacterControl {
       this.avatar.position.y = groundHeight;
     }
 
+    // Ensure the character stays within z bounds
+    if (this.avatar.position.z < -50) {
+      this.avatar.position.z = -50;
+    } else if (this.avatar.position.z > 50) {
+      this.avatar.position.z = 50;
+    }
+
+    // Ensure the camera stays within z bounds
+    if (this.camera.position.z < -42) {
+      this.camera.position.z = -42;
+    } else if (this.camera.position.z > 58) {
+      this.camera.position.z = 58;
+    }
+
     // Update the mixer
     if (this.mixer) {
       this.mixer.update(delta);
@@ -436,6 +458,13 @@ class CharacterControl {
   updateCameraTarget(moveX, moveZ) {
     this.camera.position.x += moveX;
     this.camera.position.z += moveZ;
+
+    // Restrict camera movement within z bounds
+    if (this.camera.position.z < -42) {
+      this.camera.position.z = -42;
+    } else if (this.camera.position.z > 58) {
+      this.camera.position.z = 58;
+    }
 
     this.cameraTarget.x = this.avatar.position.x;
     this.cameraTarget.y = this.avatar.position.y + 1;
