@@ -2,6 +2,8 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { FBXLoader } from "three/addons/loaders/FBXLoader.js"; // Import FBXLoader
+import { models } from "./models.js"; // Import models
+import { loadingScreen, loadingText, loadingBar, updateLoadingScreen, loadingComplete } from "./loadingScreen.js"; // Import loading screen
 
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
@@ -21,100 +23,11 @@ const fbxLoader = new FBXLoader();
 
 let mixer; // Declare mixer for animation
 
-// Create loading screen elements
-const loadingScreen = document.createElement('div');
-loadingScreen.id = 'loadingScreen';
-loadingScreen.style.position = 'fixed';
-loadingScreen.style.top = '0';
-loadingScreen.style.left = '0';
-loadingScreen.style.width = '100%';
-loadingScreen.style.height = '100%';
-loadingScreen.style.backgroundColor = 'rgba(0, 0, 0, 1)';
-loadingScreen.style.color = 'white';
-loadingScreen.style.display = 'flex';
-loadingScreen.style.flexDirection = 'column';
-loadingScreen.style.justifyContent = 'center';
-loadingScreen.style.alignItems = 'center';
-loadingScreen.style.fontSize = '24px';
-
-// Create loading text
-const loadingText = document.createElement('div');
-loadingText.innerHTML = 'Generating World 0%';
-loadingScreen.appendChild(loadingText);
-
-// Create loading bar container
-const loadingBarContainer = document.createElement('div');
-loadingBarContainer.style.width = '50%';
-loadingBarContainer.style.height = '10px';
-loadingBarContainer.style.backgroundColor = '#333';
-loadingBarContainer.style.borderRadius = '5px';
-loadingBarContainer.style.marginTop = '50px';
-
-// Create loading bar
-const loadingBar = document.createElement('div');
-loadingBar.style.width = '0%';
-loadingBar.style.height = '100%';
-loadingBar.style.backgroundColor = 'white';
-loadingBar.style.borderRadius = '5px';
-
-// Append loading bar to container
-loadingBarContainer.appendChild(loadingBar);
-loadingScreen.appendChild(loadingBarContainer);
-
 document.body.appendChild(loadingScreen);
 
 let loadedModels = 0;
 const totalModels = 17; // Update this count based on the total number of models
 let currentProgress = 0; // Track current progress for smooth transition
-let loadingComplete = false; // Track if loading is complete
-
-function updateLoadingScreen() {
-  loadedModels++;
-  const targetProgress = Math.floor((loadedModels / totalModels) * 100);
-  
-  // Smoothly update the progress
-  const updateInterval = setInterval(() => {
-    if (currentProgress < targetProgress) {
-      currentProgress++;
-      loadingText.innerHTML = `Generating World ${currentProgress}%`;
-      loadingBar.style.width = `${currentProgress}%`;
-    } else {
-      clearInterval(updateInterval);
-      if (loadedModels === totalModels) {
-        setTimeout(() => {
-          loadingScreen.style.transition = 'opacity 1s ease-out, transform 1s ease-out';
-          loadingScreen.style.opacity = '0';
-          loadingScreen.style.transform = 'translateY(-100%)';
-          setTimeout(() => {
-            loadingScreen.style.display = 'none';
-            loadingComplete = true; // Set loading complete to true
-          }, 1000);
-        }, 500);
-      }
-    }
-  }, 10); // Adjust the interval time for smoother or faster transitions
-}
-
-const models = [
-  { path: "./models/mystical_forest_cartoon.glb", scale: 0.01, position: [0, 0, 0], rotation: [0, 0, 0] },
-  { path: "./models/my_avatar.glb", scale: 2, position: [-3, 2, 50], rotation: [0, Math.PI, 0], isAvatar: true },
-  { path: "./models/Charzard Flying.glb", scale: 3, position: [0, 20, 0], rotation: [0, 0, 0], isCharizard: true },
-  { path: "./models/phantump_shiny.glb", scale: 0.01, position: [3, 5, 9], rotation: [0, 0, 0] },
-  { path: "./models/salamence.glb", scale: 0.3, position: [-30, 16, 27], rotation: [0, (Math.PI * 2) / 3, 0] },
-  { path: "./models/bulbasaur.glb", scale: 2, position: [13, -0.5, 22], rotation: [0, 0, 0] },
-  { path: "./models/lucario_and_riolu_toy_edition.glb", scale: 2, position: [-27, 6.5, 6], rotation: [0, Math.PI / 3, 0] },
-  { path: "./models/eevee.glb", scale: 3.5, position: [7, 0, 10], rotation: [0, 0, 0] },
-  { path: "./models/pikachu.glb", scale: 0.03, position: [5, 0, 10], rotation: [0, 0, 0] },
-  { path: "./models/umbreon.glb", scale: 3, position: [6, 0, 10], rotation: [0, 0, 0] },
-  { path: "./models/pidgey.glb", scale: 0.4, position: [-2.5, 7, 32], rotation: [0, Math.PI, 0] },
-  { path: "./models/arcanine.glb", scale: 1, position: [10, 3.2, 29], rotation: [0, (-Math.PI * 3) / 4, 0] },
-  { path: "./models/ssbb_pokemon_trainer.glb", scale: 0.4, position: [-14, 3, 21], rotation: [0, Math.PI / 2, 0], isTrainer: true },
-  { path: "./models/plakia.glb", scale: 0.6, position: [-32, 23, -19], rotation: [0, Math.PI / 2, 0] },
-  { path: "./models/entei.glb", scale: 0.4, position: [-25, 15.5, -4], rotation: [0, Math.PI / 2, 0] },
-  // { path: "./models/reshiram.glb", scale: 3.5, position: [60, 23, -50], rotation: [0, -Math.PI / 4, 0] },
-  { path: "./models/reshiram.glb", scale: 3.5, position: [60, 23, -14], rotation: [0, -Math.PI / 4, 0] },
-  { path: "./models/old_medieval_sign_board.glb", scale: 7, position: [3, 0, 44], rotation: [0, 0, 0], isSignboard: true },
-];
 
 models.forEach(model => {
   loader.load(model.path, function (glb) {
