@@ -5,6 +5,7 @@ import { FBXLoader } from "three/addons/loaders/FBXLoader.js"; // Import FBXLoad
 import { models } from "./models.js"; // Import models
 import { CharacterControl } from "./CharacterControl.js"; // Import CharacterControl
 import { loadingScreen, loadingText, loadingBar, updateLoadingScreen, loadingComplete } from "./loadingScreen.js"; // Import loading screen
+import { showPopup, showPokemonPopup } from "./popups.js"; // Import popup functions
 
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
@@ -77,41 +78,6 @@ models.forEach(model => {
 // charizard flying
 let charizard; // Declare globally
 
-// Add this function to create and show popup
-function showPopup() {
-    // Create popup if it doesn't exist
-    let popup = document.getElementById('welcomePopup');
-    if (!popup) {
-        popup = document.createElement('div');
-        popup.id = 'welcomePopup';
-        popup.className = 'popup';
-        
-        // Add close button
-        const closeBtn = document.createElement('span');
-        closeBtn.className = 'close-btn';
-        closeBtn.innerHTML = '×';
-        closeBtn.onclick = function() {
-            popup.style.display = 'none';
-        };
-        
-        // Add message
-        const message = document.createElement('span');
-        message.innerHTML = 'Welcome to the Pokemon World!';
-        
-        popup.appendChild(closeBtn);
-        popup.appendChild(message);
-        document.body.appendChild(popup);
-    }
-
-    // Show popup
-    popup.style.display = 'block';
-
-    // Optional: Auto-hide after 3 seconds
-    // setTimeout(() => {
-    //     popup.style.display = 'none';
-    // }, 3000);
-}
-
 // Modify the onSignboardClick function
 function onSignboardClick(event) {
     const mouse = new THREE.Vector2();
@@ -128,8 +94,29 @@ function onSignboardClick(event) {
     }
 }
 
-// Add click event listener
-window.addEventListener('click', onSignboardClick);
+// Add this function to handle Pokemon clicks
+function onPokemonClick(event) {
+    const mouse = new THREE.Vector2();
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    raycaster.setFromCamera(mouse, camera);
+
+    const intersects = raycaster.intersectObjects(scene.children, true);
+    if (intersects.length > 0) {
+        const intersectedObject = intersects[0].object;
+        const parentObject = intersectedObject.parent || intersectedObject;
+        const pokemonModel = models.find(model => model.name === parentObject.name);
+        if (pokemonModel) {
+            showPokemonPopup(pokemonModel.name);
+        }
+    }
+}
+
+// Modify the click event listener to handle both signboard and Pokemon clicks
+window.addEventListener('click', (event) => {
+    onSignboardClick(event);
+    onPokemonClick(event);
+});
 
 const sun = new THREE.DirectionalLight(0xffffff, 1);
 scene.add(sun);
@@ -349,67 +336,3 @@ function createHoveringArrow() {
     }
     animateArrowAndText();
 }
-
-// Add this function to show Pokemon popup
-function showPokemonPopup(pokemonName) {
-    // Remove existing pokemon popup if any
-    let existingPopup = document.getElementById('pokemonPopup');
-    if (existingPopup) {
-        existingPopup.remove();
-    }
-
-    // Create new popup
-    const popup = document.createElement('div');
-    popup.id = 'pokemonPopup';
-    popup.className = 'pokemon-popup';
-    popup.innerHTML = `Oh! This is a ${pokemonName}!`;
-    document.body.appendChild(popup);
-
-    // Show popup
-    popup.style.display = 'block';
-
-    // Auto-hide after 2 seconds
-    setTimeout(() => {
-        popup.style.display = 'none';
-    }, 2000);
-}
-
-// Add this function to handle Pokemon clicks
-function onPokemonClick(event) {
-    const mouse = new THREE.Vector2();
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-    raycaster.setFromCamera(mouse, camera);
-
-    // Create an object to map 3D models to Pokemon names
-    const pokemonModels = {
-        phantump: { model: phantump, name: 'Phantump' },
-        salamence: { model: salamence, name: 'Salamence' },
-        charizard: { model: charizard, name: 'Charizard' },
-        Bulbasaur: { model: Bulbasaur, name: 'Bulbasaur' },
-        Lukario: { model: Lukario, name: 'Lucario' },
-        eevee: { model: eevee, name: 'Eevee' },
-        Pikachu: { model: Pikachu, name: 'Pikachu' },
-        umbreon: { model: umbreon, name: 'Umbreon' },
-        pidgey: { model: pidgey, name: 'Pidgey' },
-        arcanine: { model: arcanine, name: 'Arcanine' }
-    };
-
-    // Check intersections with all Pokemon
-    for (const [key, pokemon] of Object.entries(pokemonModels)) {
-        if (pokemon.model) {
-            const intersects = raycaster.intersectObject(pokemon.model, true);
-            if (intersects.length > 0) {
-                showPokemonPopup(pokemon.name);
-                break;
-            }
-        }
-    }
-}
-
-// Modify the click event listener to handle both signboard and Pokemon clicks
-window.addEventListener('click', (event) => {
-    onSignboardClick(event);
-    onPokemonClick(event);
-});
