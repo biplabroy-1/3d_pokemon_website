@@ -43,6 +43,7 @@ models.forEach(model => {
         child.receiveShadow = true;
       }
     });
+    obj.userData.pokemonName = model.name; // Assign Pokémon name
     scene.add(obj);
 
     if (model.isAvatar) {
@@ -96,21 +97,27 @@ function onSignboardClick(event) {
 
 // Add this function to handle Pokemon clicks
 function onPokemonClick(event) {
-    const mouse = new THREE.Vector2();
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-    raycaster.setFromCamera(mouse, camera);
+  const mouse = new THREE.Vector2();
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-    const intersects = raycaster.intersectObjects(scene.children, true);
-    if (intersects.length > 0) {
-        const intersectedObject = intersects[0].object;
-        const parentObject = intersectedObject.parent || intersectedObject;
-        const pokemonModel = models.find(model => model.name === parentObject.name);
-        if (pokemonModel) {
-            showPokemonPopup(pokemonModel.name);
-        }
-    }
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObjects(scene.children, true);
+
+  if (intersects.length > 0) {
+      let clickedObject = intersects[0].object;
+
+      // Traverse up to find the correct parent object that holds the Pokémon name
+      while (clickedObject.parent) {
+          if (clickedObject.userData.pokemonName) {
+              showPokemonPopup(clickedObject.userData.pokemonName);
+              return;
+          }
+          clickedObject = clickedObject.parent;
+      }
+  }
 }
+
 
 // Modify the click event listener to handle both signboard and Pokemon clicks
 window.addEventListener('click', (event) => {
