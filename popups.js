@@ -56,28 +56,21 @@ export function showPopup() {
 
 // Function to show Pokemon popup
 export function showPokemonPopup(pokemonName) {
-    let existingPopup = document.getElementById('pokemonPopup');
-    if (existingPopup) {
-        existingPopup.remove();
-    }
+    const model = models.find(model => model.name === pokemonName);
+    if (!model) return;
 
-    const popup = document.createElement('div');
-    popup.id = 'pokemonPopup';
-    popup.className = 'pokemon-popup';
-
-    const closeBtn = document.createElement('span');
-    closeBtn.className = 'close-btn';
-    closeBtn.innerHTML = '×';
-    closeBtn.onclick = function() {
-        popup.style.display = 'none';
-    };
-
-    const message = document.createElement('span');
-    message.innerHTML = `Oh! This is a ${pokemonName}!`;
-
-    popup.appendChild(closeBtn);
-    popup.appendChild(message);
-    document.body.appendChild(popup);
+    const popup = document.getElementById('pokemonPopup');
+    document.getElementById('pokemonImage').src = `./images/${pokemonName.toLowerCase()}.png`;
+    document.getElementById('pokemonName').innerText = pokemonName;
+    document.getElementById('pokemonEvolution').innerText = `Evolution: ${model.evolution}`;
+    document.getElementById('pokemonStats').innerHTML = `
+        Attack: ${model.stats.attack}<br>
+        Defense: ${model.stats.defense}<br>
+        Special Attack: ${model.stats.specialAttack}<br>
+        Special Defense: ${model.stats.specialDefense}<br>
+        Speed: ${model.stats.speed}
+    `;
+    document.getElementById('pokemonMoves').innerHTML = model.moves.map(move => `${move.name}: ${move.power} Power, ${move.pp} PP`).join('<br>');
 
     popup.style.display = 'block';
 }
