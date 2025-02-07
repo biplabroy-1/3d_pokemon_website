@@ -1,7 +1,8 @@
 body {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    overflow: hidden; /* Prevent scrollbar */
+    /* box-sizing: border-box; */
 }
 
 .pokemon-popup {
@@ -9,7 +10,7 @@ body {
     top: 5%;
     left: 4%;
     width: 90%;
-    height: 90%;
+    height: 85%; /* Adjust height to ensure gap from bottom */
     background-color: black;
     color: white;
     opacity: 0.7;
@@ -17,14 +18,15 @@ body {
     border: 2px solid black;
     box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.5);
     padding: 20px;
-    overflow-y: hidden;
+    overflow-y: auto; /* Allow scrolling within the popup */
     z-index: 1000;
 }
 
-.inner-div{
+.inner-div {
     display: flex;
     gap: 20px;
 }
+
 .pokemon-popup .close-btn {
     position: absolute;
     top: 10px;

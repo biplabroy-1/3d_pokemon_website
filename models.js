@@ -13,14 +13,6 @@ export const models = [
     rotation: [0, Math.PI, 0], 
     isAvatar: true, 
     name: 'Avatar',
-    evolution: 'X -> Avatar -> Y',
-    stats: { attack: 100, defense: 80, specialAttack: 120, specialDefense: 90, speed: 95 },
-    moves: [
-      { name: 'Move 1', power: 90, pp: 15 },
-      { name: 'Move 2', power: 40, pp: 30 },
-      { name: 'Move 3', power: 100, pp: 15 },
-      { name: 'Move 4', power: 60, pp: 10 }
-    ]
   },
   { 
     path: "./models/Charzard Flying.glb", 
@@ -30,13 +22,36 @@ export const models = [
     isCharizard: true, 
     name: 'Charizard',
     evolution: 'Charmander -> Charmeleon -> Charizard',
+    type: ['Fire', 'Flying'],
+    abilities: ['Blaze'],
+    hiddenAbility: 'Solar Power',
+    baseHP: 78,
     stats: { attack: 84, defense: 78, specialAttack: 109, specialDefense: 85, speed: 100 },
     moves: [
       { name: 'Flamethrower', power: 90, pp: 15 },
       { name: 'Dragon Claw', power: 80, pp: 15 },
       { name: 'Fly', power: 90, pp: 15 },
       { name: 'Fire Spin', power: 35, pp: 15 }
-    ]
+    ],
+    evYield: { specialAttack: 3 },
+    baseExp: 240,
+    catchRate: 45,
+    weaknesses: ['Water', 'Electric', 'Rock'],
+    resistances: ['Bug', 'Steel', 'Fairy', 'Fighting', 'Fire', 'Grass'],
+    habitat: 'Mountain',
+    pokedexEntry: 'Charizard flies around the sky in search of powerful opponents. It breathes fire of such great heat that it melts anything.',
+    height: 1.7,
+    weight: 90.5,
+    eggGroup: ['Dragon', 'Monster'],
+    evolvesAt: 36,
+    friendship: 70,
+    canMegaEvolve: true,  
+    megaEvolution: {
+        name: 'Mega Charizard X',
+        type: ['Fire', 'Dragon'],
+        stats: { attack: 130, defense: 111, specialAttack: 130, specialDefense: 85, speed: 100 },
+        ability: 'Tough Claws'
+    }
   },
   { 
     path: "./models/phantump_shiny.glb", 
@@ -45,13 +60,30 @@ export const models = [
     rotation: [0, 0, 0], 
     name: 'Phantump',
     evolution: 'X -> Phantump -> Y',
+    type: ['Ghost', 'Grass'],
+    abilities: ['Natural Cure', 'Frisk'],
+    hiddenAbility: 'Harvest',
+    baseHP: 43,
     stats: { attack: 70, defense: 48, specialAttack: 50, specialDefense: 60, speed: 38 },
     moves: [
       { name: 'Move 1', power: 50, pp: 20 },
       { name: 'Move 2', power: 60, pp: 15 },
       { name: 'Move 3', power: 70, pp: 10 },
       { name: 'Move 4', power: 80, pp: 5 }
-    ]
+    ],
+    evYield: { attack: 1 },
+    baseExp: 62,
+    catchRate: 120,
+    weaknesses: ['Ghost', 'Fire', 'Flying', 'Ice', 'Dark'],
+    resistances: ['Ground', 'Water', 'Grass', 'Electric'],
+    habitat: 'Forest',
+    pokedexEntry: 'Phantump is a spirit that possesses a tree stump, wandering the forest.',
+    height: 0.4,
+    weight: 7.0,
+    eggGroup: ['Grass', 'Amorphous'],
+    evolvesAt: 36,
+    friendship: 70,
+    canMegaEvolve: false
   },
   { 
     path: "./models/salamence.glb", 
@@ -60,13 +92,36 @@ export const models = [
     rotation: [0, (Math.PI * 2) / 3, 0], 
     name: 'Salamence',
     evolution: 'Bagon -> Shelgon -> Salamence',
+    type: ['Dragon', 'Flying'],
+    abilities: ['Intimidate'],
+    hiddenAbility: 'Moxie',
+    baseHP: 95,
     stats: { attack: 135, defense: 80, specialAttack: 110, specialDefense: 80, speed: 100 },
     moves: [
       { name: 'Dragon Claw', power: 80, pp: 15 },
       { name: 'Fly', power: 90, pp: 15 },
       { name: 'Crunch', power: 80, pp: 15 },
       { name: 'Flamethrower', power: 90, pp: 15 }
-    ]
+    ],
+    evYield: { attack: 3 },
+    baseExp: 270,
+    catchRate: 45,
+    weaknesses: ['Ice', 'Dragon', 'Fairy'],
+    resistances: ['Bug', 'Fighting', 'Fire', 'Water', 'Grass'],
+    habitat: 'Mountain',
+    pokedexEntry: 'Salamence flies around the sky in search of powerful opponents.',
+    height: 1.5,
+    weight: 102.6,
+    eggGroup: ['Dragon'],
+    evolvesAt: 50,
+    friendship: 70,
+    canMegaEvolve: true,
+    megaEvolution: {
+        name: 'Mega Salamence',
+        type: ['Dragon', 'Flying'],
+        stats: { attack: 145, defense: 130, specialAttack: 120, specialDefense: 90, speed: 120 },
+        ability: 'Aerilate'
+    }
   },
   { 
     path: "./models/bulbasaur.glb", 
@@ -75,13 +130,36 @@ export const models = [
     rotation: [0, 0, 0], 
     name: 'Bulbasaur',
     evolution: 'Bulbasaur -> Ivysaur -> Venusaur',
+    type: ['Grass', 'Poison'],
+    abilities: ['Overgrow'],
+    hiddenAbility: 'Chlorophyll',
+    baseHP: 45,
     stats: { attack: 49, defense: 49, specialAttack: 65, specialDefense: 65, speed: 45 },
     moves: [
       { name: 'Vine Whip', power: 45, pp: 25 },
       { name: 'Razor Leaf', power: 55, pp: 25 },
       { name: 'Seed Bomb', power: 80, pp: 15 },
       { name: 'Solar Beam', power: 120, pp: 10 }
-    ]
+    ],
+    evYield: { specialAttack: 1 },
+    baseExp: 64,
+    catchRate: 45,
+    weaknesses: ['Fire', 'Psychic', 'Flying', 'Ice'],
+    resistances: ['Water', 'Electric', 'Grass', 'Fighting', 'Fairy'],
+    habitat: 'Grassland',
+    pokedexEntry: 'Bulbasaur can be seen napping in bright sunlight. There is a seed on its back. By soaking up the sun’s rays, the seed grows progressively larger.',
+    height: 0.7,
+    weight: 6.9,
+    eggGroup: ['Monster', 'Grass'],
+    evolvesAt: 16,
+    friendship: 70,
+    canMegaEvolve: true,
+    megaEvolution: {
+        name: 'Mega Venusaur',
+        type: ['Grass', 'Poison'],
+        stats: { attack: 100, defense: 123, specialAttack: 122, specialDefense: 120, speed: 80 },
+        ability: 'Thick Fat'
+    }
   },
   { 
     path: "./models/lucario_and_riolu_toy_edition.glb", 
@@ -90,13 +168,36 @@ export const models = [
     rotation: [0, Math.PI / 3, 0], 
     name: 'Lucario',
     evolution: 'Riolu -> Lucario -> Mega Lucario',
+    type: ['Fighting', 'Steel'],
+    abilities: ['Steadfast', 'Inner Focus'],
+    hiddenAbility: 'Justified',
+    baseHP: 70,
     stats: { attack: 110, defense: 70, specialAttack: 115, specialDefense: 70, speed: 90 },
     moves: [
       { name: 'Aura Sphere', power: 80, pp: 20 },
       { name: 'Close Combat', power: 120, pp: 5 },
       { name: 'Dragon Pulse', power: 85, pp: 10 },
       { name: 'Extreme Speed', power: 80, pp: 5 }
-    ]
+    ],
+    evYield: { attack: 1, specialAttack: 1 },
+    baseExp: 184,
+    catchRate: 45,
+    weaknesses: ['Fire', 'Fighting', 'Ground'],
+    resistances: ['Normal', 'Rock', 'Bug', 'Steel', 'Grass', 'Ice', 'Dragon', 'Dark'],
+    habitat: 'Mountain',
+    pokedexEntry: 'Lucario reads its opponent’s feelings with its aura waves. It can tell how others are feeling from over half a mile away.',
+    height: 1.2,
+    weight: 54.0,
+    eggGroup: ['Field', 'Human-Like'],
+    evolvesAt: 32,
+    friendship: 70,
+    canMegaEvolve: true,
+    megaEvolution: {
+        name: 'Mega Lucario',
+        type: ['Fighting', 'Steel'],
+        stats: { attack: 145, defense: 88, specialAttack: 140, specialDefense: 70, speed: 112 },
+        ability: 'Adaptability'
+    }
   },
   { 
     path: "./models/eevee.glb", 
@@ -105,13 +206,30 @@ export const models = [
     rotation: [0, 0, 0], 
     name: 'Eevee',
     evolution: 'Eevee -> Vaporeon/Jolteon/Flareon/Espeon/Umbreon/Leafeon/Glaceon/Sylveon',
+    type: ['Normal'],
+    abilities: ['Run Away', 'Adaptability'],
+    hiddenAbility: 'Anticipation',
+    baseHP: 55,
     stats: { attack: 55, defense: 50, specialAttack: 45, specialDefense: 65, speed: 55 },
     moves: [
       { name: 'Quick Attack', power: 40, pp: 30 },
       { name: 'Bite', power: 60, pp: 25 },
       { name: 'Swift', power: 60, pp: 20 },
       { name: 'Take Down', power: 90, pp: 20 }
-    ]
+    ],
+    evYield: { specialDefense: 1 },
+    baseExp: 65,
+    catchRate: 45,
+    weaknesses: ['Fighting'],
+    resistances: ['Ghost'],
+    habitat: 'Urban',
+    pokedexEntry: 'Eevee has an unstable genetic makeup that suddenly mutates due to the environment in which it lives. Radiation from various stones causes this Pokémon to evolve.',
+    height: 0.3,
+    weight: 6.5,
+    eggGroup: ['Field'],
+    evolvesAt: 36,
+    friendship: 70,
+    canMegaEvolve: false
   },
   { 
     path: "./models/pikachu.glb", 
@@ -120,13 +238,30 @@ export const models = [
     rotation: [0, 0, 0], 
     name: 'Pikachu',
     evolution: 'Pichu -> Pikachu -> Raichu',
+    type: ['Electric'],
+    abilities: ['Static'],
+    hiddenAbility: 'Lightning Rod',
+    baseHP: 35,
     stats: { attack: 55, defense: 40, specialAttack: 50, specialDefense: 50, speed: 90 },
     moves: [
       { name: 'Thunderbolt', power: 90, pp: 15 },
       { name: 'Quick Attack', power: 40, pp: 30 },
       { name: 'Iron Tail', power: 100, pp: 15 },
       { name: 'Electro Ball', power: 'Varies', pp: 10 }
-    ]
+    ],
+    evYield: { speed: 2 },
+    baseExp: 112,
+    catchRate: 190,
+    weaknesses: ['Ground'],
+    resistances: ['Flying', 'Steel', 'Electric'],
+    habitat: 'Forest',
+    pokedexEntry: 'Pikachu that can generate powerful electricity have cheek sacs that are extra soft and super stretchy.',
+    height: 0.4,
+    weight: 6.0,
+    eggGroup: ['Field', 'Fairy'],
+    evolvesAt: 22,
+    friendship: 70,
+    canMegaEvolve: false
   },
   { 
     path: "./models/umbreon.glb", 
@@ -135,13 +270,30 @@ export const models = [
     rotation: [0, 0, 0], 
     name: 'Umbreon',
     evolution: 'Eevee -> Umbreon',
+    type: ['Dark'],
+    abilities: ['Synchronize'],
+    hiddenAbility: 'Inner Focus',
+    baseHP: 95,
     stats: { attack: 65, defense: 110, specialAttack: 60, specialDefense: 130, speed: 65 },
     moves: [
       { name: 'Foul Play', power: 95, pp: 15 },
       { name: 'Dark Pulse', power: 80, pp: 15 },
       { name: 'Shadow Ball', power: 80, pp: 15 },
       { name: 'Moonlight', power: 'N/A', pp: 5 }
-    ]
+    ],
+    evYield: { specialDefense: 2 },
+    baseExp: 184,
+    catchRate: 45,
+    weaknesses: ['Fighting', 'Bug', 'Fairy'],
+    resistances: ['Ghost', 'Dark'],
+    habitat: 'Urban',
+    pokedexEntry: 'Umbreon evolved as a result of exposure to the moon’s waves. It hides silently in darkness and waits for its foes to make a move.',
+    height: 1.0,
+    weight: 27.0,
+    eggGroup: ['Field'],
+    evolvesAt: 36,
+    friendship: 70,
+    canMegaEvolve: false
   },
   { 
     path: "./models/pidgey.glb", 
@@ -150,13 +302,30 @@ export const models = [
     rotation: [0, Math.PI, 0], 
     name: 'Pidgey',
     evolution: 'Pidgey -> Pidgeotto -> Pidgeot',
+    type: ['Normal', 'Flying'],
+    abilities: ['Keen Eye', 'Tangled Feet'],
+    hiddenAbility: 'Big Pecks',
+    baseHP: 40,
     stats: { attack: 45, defense: 40, specialAttack: 35, specialDefense: 35, speed: 56 },
     moves: [
       { name: 'Gust', power: 40, pp: 35 },
       { name: 'Quick Attack', power: 40, pp: 30 },
       { name: 'Wing Attack', power: 60, pp: 35 },
       { name: 'Air Slash', power: 75, pp: 15 }
-    ]
+    ],
+    evYield: { speed: 1 },
+    baseExp: 50,
+    catchRate: 255,
+    weaknesses: ['Electric', 'Ice', 'Rock'],
+    resistances: ['Bug', 'Grass', 'Ground'],
+    habitat: 'Forest',
+    pokedexEntry: 'Pidgey has an extremely sharp sense of direction. It is capable of unerringly returning home to its nest, however far it may be removed from its familiar surroundings.',
+    height: 0.3,
+    weight: 1.8,
+    eggGroup: ['Flying'],
+    evolvesAt: 18,
+    friendship: 70,
+    canMegaEvolve: false
   },
   { 
     path: "./models/arcanine.glb", 
@@ -165,13 +334,30 @@ export const models = [
     rotation: [0, (-Math.PI * 3) / 4, 0], 
     name: 'Arcanine',
     evolution: 'Growlithe -> Arcanine',
+    type: ['Fire'],
+    abilities: ['Intimidate', 'Flash Fire'],
+    hiddenAbility: 'Justified',
+    baseHP: 90,
     stats: { attack: 110, defense: 80, specialAttack: 100, specialDefense: 80, speed: 95 },
     moves: [
       { name: 'Flamethrower', power: 90, pp: 15 },
       { name: 'Extreme Speed', power: 80, pp: 5 },
       { name: 'Crunch', power: 80, pp: 15 },
       { name: 'Flare Blitz', power: 120, pp: 15 }
-    ]
+    ],
+    evYield: { attack: 2 },
+    baseExp: 194,
+    catchRate: 75,
+    weaknesses: ['Water', 'Ground', 'Rock'],
+    resistances: ['Bug', 'Steel', 'Fire', 'Grass', 'Ice', 'Fairy'],
+    habitat: 'Grassland',
+    pokedexEntry: 'Arcanine is known for its high speed. It is said to be capable of running over 6,200 miles in a single day and night.',
+    height: 1.9,
+    weight: 155.0,
+    eggGroup: ['Field'],
+    evolvesAt: 36,
+    friendship: 70,
+    canMegaEvolve: false
   },
   { 
     path: "./models/ssbb_pokemon_trainer.glb", 

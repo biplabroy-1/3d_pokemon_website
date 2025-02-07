@@ -64,6 +64,7 @@ export function showPokemonPopup(pokemonName) {
     document.getElementById('pokemonName').innerText = pokemonName;
     document.getElementById('pokemonEvolution').innerText = `Evolution: ${model.evolution}`;
     document.getElementById('pokemonStats').innerHTML = `
+        HP: ${model.baseHP}<br>
         Attack: ${model.stats.attack}<br>
         Defense: ${model.stats.defense}<br>
         Special Attack: ${model.stats.specialAttack}<br>
@@ -71,6 +72,20 @@ export function showPokemonPopup(pokemonName) {
         Speed: ${model.stats.speed}
     `;
     document.getElementById('pokemonMoves').innerHTML = model.moves.map(move => `${move.name}: ${move.power} Power, ${move.pp} PP`).join('<br>');
+    document.getElementById('pokemonType').innerText = `Type: ${model.type.join(', ')}`;
+    document.getElementById('pokemonAbilities').innerText = `Abilities: ${model.abilities.join(', ')}`;
+    document.getElementById('pokemonHiddenAbility').innerText = `Hidden Ability: ${model.hiddenAbility}`;
+    document.getElementById('pokemonWeaknesses').innerText = `Weaknesses: ${model.weaknesses.join(', ')}`;
+    document.getElementById('pokemonResistances').innerText = `Resistances: ${model.resistances.join(', ')}`;
+    document.getElementById('pokemonHabitat').innerText = `Habitat: ${model.habitat}`;
+    document.getElementById('pokemonPokedexEntry').innerText = `Pokedex Entry: ${model.pokedexEntry}`;
+    document.getElementById('pokemonHeight').innerText = `Height: ${model.height} m`;
+    document.getElementById('pokemonWeight').innerText = `Weight: ${model.weight} kg`;
+    document.getElementById('pokemonEggGroup').innerText = `Egg Group: ${model.eggGroup.join(', ')}`;
+    document.getElementById('pokemonEvolvesAt').innerText = `Evolves At: Level ${model.evolvesAt}`;
+    document.getElementById('pokemonFriendship').innerText = `Friendship: ${model.friendship}`;
+    document.getElementById('pokemonBaseExp').innerText = `Base Experience: ${model.baseExp}`;
+    document.getElementById('pokemonCatchRate').innerText = `Catch Rate: ${model.catchRate}`;
 
     popup.style.display = 'block';
 }
