@@ -19,12 +19,12 @@ body {
     padding: 20px;
     overflow-y: hidden;
     z-index: 1000;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 20px;
 }
 
+.inner-div{
+    display: flex;
+    gap: 20px;
+}
 .pokemon-popup .close-btn {
     position: absolute;
     top: 10px;
@@ -33,9 +33,43 @@ body {
     cursor: pointer;
 }
 
+.pokemon-popup .left-column {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-right: 20px;
+}
+
+.pokemon-popup .right-column {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.pokemon-popup .pokemon-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
 .pokemon-popup .pokemon-image {
-    width: 100%;
+    width: 80%;
     height: auto;
+}
+
+.pokemon-popup .pokemon-name {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.pokemon-popup .pokemon-evolution {
+    font-size: 18px;
+    text-align: center;
 }
 
 .pokemon-popup .pokemon-info {
@@ -48,6 +82,14 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.pokemon-popup .pokemon-stats p, .pokemon-popup .pokemon-moves p {
+    margin: 5px 0;
 }
 
 .pokemon-popup h1 {
