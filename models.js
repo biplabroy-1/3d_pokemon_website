@@ -1,5 +1,5 @@
 export const models = [
-  { path: "./models/mystical_forest_cartoon.glb", scale: 0.01, position: [0, 0, 0], rotation: [0, 0, 0], name: 'Mystical Forest' },
+  { path: "./models/mystical_forest_cartoon.glb", scale: 0.01, position: [0, 0, 0], rotation: [0, 0, 0] },
   { path: "./models/my_avatar.glb", scale: 2, position: [-3, 2, 50], rotation: [0, Math.PI, 0], isAvatar: true, name: 'Avatar' },
   { path: "./models/Charzard Flying.glb", scale: 3, position: [0, 20, 0], rotation: [0, 0, 0], isCharizard: true, name: 'Charizard' },
   { path: "./models/phantump_shiny.glb", scale: 0.01, position: [3, 5, 9], rotation: [0, 0, 0], name: 'Phantump' },
@@ -15,5 +15,5 @@ export const models = [
   { path: "./models/plakia.glb", scale: 0.6, position: [-32, 23, -19], rotation: [0, Math.PI / 2, 0], name: 'Plakia' },
   { path: "./models/entei.glb", scale: 0.4, position: [-25, 15.5, -4], rotation: [0, Math.PI / 2, 0], name: 'Entei' },
   { path: "./models/reshiram.glb", scale: 3.5, position: [60, 23, -14], rotation: [0, -Math.PI / 4, 0], name: 'Reshiram' },
-  { path: "./models/old_medieval_sign_board.glb", scale: 7, position: [3, 0, 44], rotation: [0, 0, 0], isSignboard: true, name: 'Signboard' },
+  { path: "./models/old_medieval_sign_board.glb", scale: 7, position: [3, 0, 44], rotation: [0, 0, 0], isSignboard: true },
 ];
