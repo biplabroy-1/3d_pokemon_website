@@ -136,11 +136,9 @@ body {
 }
 
 .pokemon-popup .navigation-buttons .prev-button::before {
-    content: "<";
     margin-right: 5px;
 }
 
 .pokemon-popup .navigation-buttons .next-button::after {
-    content: ">";
     margin-left: 5px;
 }
