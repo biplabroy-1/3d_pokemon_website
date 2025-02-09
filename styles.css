@@ -97,3 +97,50 @@ body {
 .pokemon-popup h1 {
     margin-top: 0;
 }
+
+.pokemon-popup .page {
+    display: none;
+}
+
+.pokemon-popup .page.active {
+    display: block;
+}
+
+.pokemon-popup .navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.pokemon-popup .navigation-buttons button {
+    background-color: #444;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.pokemon-popup .navigation-buttons button:hover {
+    background-color: #666;
+}
+
+.pokemon-popup .navigation-buttons .prev-button {
+    position: absolute;
+    left: 20px;
+}
+
+.pokemon-popup .navigation-buttons .next-button {
+    position: absolute;
+    right: 20px;
+}
+
+.pokemon-popup .navigation-buttons .prev-button::before {
+    content: "<";
+    margin-right: 5px;
+}
+
+.pokemon-popup .navigation-buttons .next-button::after {
+    content: ">";
+    margin-left: 5px;
+}
