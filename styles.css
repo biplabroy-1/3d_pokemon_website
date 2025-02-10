@@ -61,6 +61,7 @@ body {
 .pokemon-popup .pokemon-image {
     width: 80%;
     height: auto;
+    background-color: white; /* Ensure background is not visible through the image */
 }
 
 .pokemon-popup .pokemon-name {

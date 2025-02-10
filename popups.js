@@ -71,14 +71,24 @@ export function showPokemonPopup(pokemonName) {
     const modelContainer = document.getElementById('modelContainer');
     modelContainer.innerHTML = ''; // Clear previous model
 
-    initThreeJS(modelContainer);
+    // Display image if the imagePath is provided
+    if (model.imagePath) {
+        const img = document.createElement('img');
+        img.src = model.imagePath;
+        img.style.width = '100%';
+        img.style.height = 'auto';
+        modelContainer.appendChild(img);
+    } else {
+        // Load and display 3D model
+        initThreeJS(modelContainer);
 
-    loadModel(model.path, function (modelScene) {
-        modelScene.scale.set(model.scale, model.scale, model.scale);
-        modelScene.position.set(...model.position);
-        modelScene.rotation.set(...model.rotation);
-        renderModel(modelScene); // Render the 3D model
-    });
+        loadModel(model.path, function (modelScene) {
+            modelScene.scale.set(model.scale, model.scale, model.scale);
+            modelScene.position.set(...model.position);
+            modelScene.rotation.set(...model.rotation);
+            renderModel(modelScene); // Render the 3D model
+        });
+    }
 
     document.getElementById('pokemonName').innerText = pokemonName;
     document.getElementById('pokemonEvolution').innerText = `Evolution: ${model.evolution}`;
