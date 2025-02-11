@@ -122,6 +122,7 @@ export function showPokemonPopup(pokemonName) {
     // Show the first page and hide others
     document.querySelectorAll('.page').forEach((page, index) => {
         page.classList.toggle('active', index === 0);
+        page.style.display = index === 0 ? 'block' : 'none'; // Ensure only the active page is displayed
     });
 
     // Update navigation buttons visibility
@@ -187,7 +188,9 @@ document.getElementById('prevPage').addEventListener('click', () => {
     const activePage = Array.from(pages).findIndex(page => page.classList.contains('active'));
     if (activePage > 0) {
         pages[activePage].classList.remove('active');
+        pages[activePage].style.display = 'none'; // Hide the current page
         pages[activePage - 1].classList.add('active');
+        pages[activePage - 1].style.display = 'block'; // Show the previous page
     }
     updateNavigationButtons();
 });
@@ -197,7 +200,9 @@ document.getElementById('nextPage').addEventListener('click', () => {
     const activePage = Array.from(pages).findIndex(page => page.classList.contains('active'));
     if (activePage < pages.length - 1) {
         pages[activePage].classList.remove('active');
+        pages[activePage].style.display = 'none'; // Hide the current page
         pages[activePage + 1].classList.add('active');
+        pages[activePage + 1].style.display = 'block'; // Show the next page
     }
     updateNavigationButtons();
 });
