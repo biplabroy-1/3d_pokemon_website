@@ -135,10 +135,18 @@ body {
 }
 
 .pokemon-popup .page-1 p {
-    font-size: 18px;
+    font-size: 14px;
     margin: 10px 0;
     text-align: center;
 }
+
+.pokemon-info{
+    float: right;
+    width: 50%;
+    top: 500px;
+    margin-top: 100px;
+}
+
 
 .pokemon-popup .page.active {
     display: flex; /* Show active page */
@@ -168,12 +176,14 @@ body {
 
 .pokemon-popup .navigation-buttons .prev-button {
     position: absolute;
+    top: 50%;
     left: 20px;
 }
 
 .pokemon-popup .navigation-buttons .next-button {
     position: absolute;
     right: 20px;
+    top: 50%;
 }
 
 .pokemon-popup .navigation-buttons .prev-button::before {
