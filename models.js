@@ -7,7 +7,7 @@ export const models = [
     // name: 'Mystical Forest',
   },
   { 
-    path: "./models/my_avatar.glb", 
+    path: "./models/my_avatar.glb",  
     scale: 2, 
     position: [-3, 2, 50], 
     rotation: [0, Math.PI, 0], 

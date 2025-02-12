@@ -60,12 +60,12 @@ body {
     justify-content: center;
     align-items: center;
     margin-bottom: 20px;
-    width: 100%; /* Ensure the container takes full width */
+    width: 50%; /* Ensure the container takes 50% width */
 }
 
 .pokemon-popup .pokemon-image {
-    width: 100%;
-    height: auto;
+    width: 100%; /* Specific width */
+    height: auto; /* Maintain aspect ratio */
     background-color: white; /* Ensure background is not visible through the image */
     display: block; /* Ensure the image is treated as a block element */
     margin: 0 auto; /* Center the image horizontally */
@@ -87,10 +87,9 @@ body {
 }
 
 .pokemon-popup .pokemon-info {
-    /* display: flex; */
-    /* flex-direction: column; */
-    /* justify-content: center; */
     text-align: center;
+    width: 50%; 
+    /* Ensure the text container takes 50% width */
 }
 
 .pokemon-popup .pokemon-stats, .pokemon-popup .pokemon-moves {
@@ -112,41 +111,27 @@ body {
 }
 
 .pokemon-popup .page {
-    position: absolute;
-    width: 100%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0;
-    visibility: hidden;
     display: none; /* Completely hide inactive pages */
-    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
-}
-.pokemon-popup .page-1{
-    /* background-color: #ff0000; */
-    display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    position: relative; 
-
-
-
-
-
-
-
-
-    
-    left: 300px; 
-    top: 250px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 }
 
-.pokemon-popup .page-1 h1{
+.pokemon-popup .page-1 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Ensure image and text are side by side */
+    width: 100%; /* Ensure the container takes full width */
+}
+
+.pokemon-popup .page-1 h1 {
     font-size: 4rem;
     margin-bottom: 20px;
     text-align: center;
 }
+
 .pokemon-popup .page-1 p {
     font-size: 18px;
     margin: 10px 0;
@@ -154,9 +139,9 @@ body {
 }
 
 .pokemon-popup .page.active {
+    display: flex; /* Show active page */
     opacity: 1;
     visibility: visible;
-    display: block; /* Show active page */
 }
 
 .pokemon-popup .navigation-buttons {
