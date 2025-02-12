@@ -17,58 +17,52 @@
     <div id="pokemonPopup" class="pokemon-popup" style="display: none">
       <span class="close-btn" onclick="document.getElementById('pokemonPopup').style.display='none'">×</span>
       <div class="inner-div">
-        <div class="right-column">
-          <div id="modelContainer" class="pokemon-image-container">
-            <canvas id="modelCanvas"></canvas> <!-- Canvas for 3D model -->
-          </div> <!-- Container for 3D model -->
-          <div class="pokemon-info">
-            <h1 id="pokemonName" class="pokemon-name"></h1>
-            <p id="pokemonEvolution" class="pokemon-evolution"></p>
-            <p id="pokemonType"></p>
-            <p id="pokemonAbilities"></p>
-            <p id="pokemonHiddenAbility"></p>
+          <!-- Remove duplicate pokemon-info here -->
+          <div class="right-column" id="rightColumn">
+              <div id="modelContainer" class="pokemon-image-container">
+                  <canvas id="modelCanvas"></canvas> <!-- Canvas for 3D model -->
+              </div>
+              <div class="pokemon-info">
+                  <h1 id="pokemonName" class="pokemon-name"></h1>
+                  <p id="pokemonEvolution" class="pokemon-evolution"></p>
+                  <p id="pokemonType"></p>
+                  <p id="pokemonAbilities"></p>
+                  <p id="pokemonHiddenAbility"></p>
+              </div>
           </div>
-        </div>
-        <div class="left-column">
-          <div class="page page-1 active">
-            <div class="pokemon-info">
-              <h1 id="pokemonName" class="pokemon-name"></h1>
-              <p id="pokemonEvolution" class="pokemon-evolution"></p>
-              <p id="pokemonType"></p>
-              <p id="pokemonAbilities"></p>
-              <p id="pokemonHiddenAbility"></p>
-            </div>
+          <div class="left-column">
+              <div class="page page-1 active">
+                  <p id="pokemonWeaknesses"></p>
+                  <p id="pokemonResistances"></p>
+                  <p id="pokemonHabitat"></p>
+              </div>
+              <div class="page page-2">
+                  <p id="pokemonPokedexEntry"></p>
+                  <p id="pokemonHeight"></p>
+                  <p id="pokemonWeight"></p>
+                  <p id="pokemonEggGroup"></p>
+                  <p id="pokemonEvolvesAt"></p>
+                  <p id="pokemonFriendship"></p>
+              </div>
+              <div class="page page-3">
+                  <div class="pokemon-stats">
+                      <p id="pokemonStats"></p>
+                      <p id="pokemonBaseExp"></p>
+                      <p id="pokemonCatchRate"></p>
+                      <p id="pokemonStats"></p>
+                  </div>
+                  <div class="pokemon-moves">
+                      <p id="pokemonMoves"></p>
+                  </div>
+              </div>
+              <div class="navigation-buttons">
+                  <button id="prevPage" class="prev-button">&lt; Previous</button>
+                  <button id="nextPage" class="next-button">Next &gt;</button>
+              </div>
           </div>
-          <div class="page page-2">
-            <div class="pokemon-details">
-              <p id="pokemonWeaknesses"></p>
-              <p id="pokemonResistances"></p>
-              <p id="pokemonHabitat"></p>
-              <p id="pokemonPokedexEntry"></p>
-              <p id="pokemonHeight"></p>
-              <p id="pokemonWeight"></p>
-              <p id="pokemonEggGroup"></p>
-              <p id="pokemonEvolvesAt"></p>
-              <p id="pokemonFriendship"></p>
-              <p id="pokemonBaseExp"></p>
-              <p id="pokemonCatchRate"></p>
-            </div>
-          </div>
-          <div class="page page-3">
-            <div class="pokemon-stats">
-              <p id="pokemonStats"></p>
-            </div>
-            <div class="pokemon-moves">
-              <p id="pokemonMoves"></p>
-            </div>
-          </div>
-          <div class="navigation-buttons">
-            <button id="prevPage" class="prev-button">&lt; Previous</button>
-            <button id="nextPage" class="next-button">Next &gt;</button>
-          </div>
-        </div>
       </div>
-    </div>
+  </div>
+  
     <script type="importmap">
       {
         "imports": {
