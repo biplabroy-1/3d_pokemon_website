@@ -7,9 +7,7 @@
     <title>3D Game</title>
   </head>
   <body>
-    <!-- <div id="experience"> -->
     <canvas id="canvas" style="display: block;"></canvas>
-    <!-- </div> -->
     <div id="welcomePopup" class="popup" style="display: none;">
       <span class="close-btn" onclick="document.getElementById('welcomePopup').style.display='none'">×</span>
       <span>Welcome to the Pokemon World!</span>
@@ -17,21 +15,18 @@
     <div id="pokemonPopup" class="pokemon-popup" style="display: none">
       <span class="close-btn" onclick="document.getElementById('pokemonPopup').style.display='none'">×</span>
       <div class="inner-div">
-          <!-- Remove duplicate pokemon-info here -->
-          <div class="right-column" id="rightColumn">
+          <div class="left-column" id="leftColumn">
               <div id="modelContainer" class="pokemon-image-container">
                   <canvas id="modelCanvas"></canvas> <!-- Canvas for 3D model -->
               </div>
-              <div class="pokemon-info">
+          </div>
+          <div class="right-column">
+              <div class="page page-1 active">
                   <h1 id="pokemonName" class="pokemon-name"></h1>
                   <p id="pokemonEvolution" class="pokemon-evolution"></p>
                   <p id="pokemonType"></p>
                   <p id="pokemonAbilities"></p>
                   <p id="pokemonHiddenAbility"></p>
-              </div>
-          </div>
-          <div class="left-column">
-              <div class="page page-1 active">
                   <p id="pokemonWeaknesses"></p>
                   <p id="pokemonResistances"></p>
                   <p id="pokemonHabitat"></p>
@@ -49,7 +44,6 @@
                       <p id="pokemonStats"></p>
                       <p id="pokemonBaseExp"></p>
                       <p id="pokemonCatchRate"></p>
-                      <p id="pokemonStats"></p>
                   </div>
                   <div class="pokemon-moves">
                       <p id="pokemonMoves"></p>

@@ -22,7 +22,7 @@ export const models = [
     rotation: [0, 0, 0], 
     isCharizard: true, 
     name: 'Charizard',
-    evolution: 'Charmander -> Charmeleon -> Charizard',
+    evolution: 'Charmander > Charmeleon > Charizard',
     type: ['Fire', 'Flying'],
     abilities: ['Blaze'],
     hiddenAbility: 'Solar Power',

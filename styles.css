@@ -2,21 +2,22 @@ body {
     margin: 0;
     padding: 0;
     overflow: hidden; /* Prevent scrollbar */
-    /* box-sizing: border-box; */
+    font-family: 'Arial', sans-serif; /* Set a default font */
+    background-color: #f0f0f0; /* Light background color */
 }
 
 .pokemon-popup {
     position: fixed;
     top: 5%;
-    left: 4%;
-    width: 90%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
     height: 85%; /* Adjust height to ensure gap from bottom */
-    background-color: black;
+    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black background */
     color: white;
-    opacity: 0.7;
     border-radius: 20px;
-    border: 2px solid black;
-    box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.5);
+    border: 2px solid #444; /* Darker border */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Softer shadow */
     padding: 20px;
     overflow-y: auto; /* Allow scrolling within the popup */
     z-index: 1000;
@@ -33,21 +34,24 @@ body {
     right: 10px;
     font-size: 24px;
     cursor: pointer;
+    color: #fff;
+    background: #444;
+    border-radius: 50%;
+    padding: 5px 10px;
 }
 
 .pokemon-popup .left-column {
-    flex: 3;
+    flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    padding-right: 20px;
+    justify-content: center;
+    align-items: center;
 }
 
 .pokemon-popup .right-column {
     flex: 2;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
 }
 
@@ -60,28 +64,33 @@ body {
 }
 
 .pokemon-popup .pokemon-image {
-    width: 80%;
+    width: 100%;
     height: auto;
     background-color: white; /* Ensure background is not visible through the image */
     display: block; /* Ensure the image is treated as a block element */
     margin: 0 auto; /* Center the image horizontally */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Soft shadow */
 }
 
 .pokemon-popup .pokemon-name {
-    font-size: 24px;
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.pokemon-popup .pokemon-evolution {
+    font-size: 20px;
     text-align: center;
     margin-bottom: 10px;
 }
 
-.pokemon-popup .pokemon-evolution {
-    font-size: 18px;
-    text-align: center;
-}
-
 .pokemon-popup .pokemon-info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* justify-content: center; */
+    text-align: center;
 }
 
 .pokemon-popup .pokemon-stats, .pokemon-popup .pokemon-moves {
@@ -113,14 +122,42 @@ body {
     display: none; /* Completely hide inactive pages */
     transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 }
+.pokemon-popup .page-1{
+    /* background-color: #ff0000; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative; 
+
+
+
+
+
+
+
+
+    
+    left: 300px; 
+    top: 250px;
+}
+
+.pokemon-popup .page-1 h1{
+    font-size: 4rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+.pokemon-popup .page-1 p {
+    font-size: 18px;
+    margin: 10px 0;
+    text-align: center;
+}
 
 .pokemon-popup .page.active {
     opacity: 1;
     visibility: visible;
     display: block; /* Show active page */
 }
-
-
 
 .pokemon-popup .navigation-buttons {
     display: flex;
@@ -135,6 +172,7 @@ body {
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .pokemon-popup .navigation-buttons button:hover {
