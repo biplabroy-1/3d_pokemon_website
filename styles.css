@@ -61,6 +61,7 @@ body {
     align-items: center;
     margin-bottom: 20px;
     width: 50%; /* Ensure the container takes 50% width */
+    float: left; /* Float the container to the left */
 }
 
 .pokemon-popup .pokemon-image {
@@ -90,6 +91,7 @@ body {
     text-align: center;
     width: 50%; 
     /* Ensure the text container takes 50% width */
+    float: right; /* Float the text container to the right */
 }
 
 .pokemon-popup .pokemon-stats, .pokemon-popup .pokemon-moves {
