@@ -34,6 +34,8 @@ function loadModel(path, onLoad) {
     loader.load(path, function (gltf) {
         const modelScene = gltf.scene.clone();
         onLoad(modelScene);
+    }, undefined, function (error) {
+        console.error('An error occurred while loading the model:', error);
     });
 }
 
@@ -90,31 +92,93 @@ export function showPokemonPopup(pokemonName) {
         });
     }
 
-    document.getElementById('pokemonName').innerText = pokemonName;
-    document.getElementById('pokemonEvolution').innerText = `Evolution: ${model.evolution}`;
-    document.getElementById('pokemonType').innerText = `Type: ${model.type.join(', ')}`;
-    document.getElementById('pokemonAbilities').innerText = `Abilities: ${model.abilities.join(', ')}`;
-    document.getElementById('pokemonHiddenAbility').innerText = `Hidden Ability: ${model.hiddenAbility}`;
-    document.getElementById('pokemonWeaknesses').innerText = `Weaknesses: ${model.weaknesses.join(', ')}`;
-    document.getElementById('pokemonResistances').innerText = `Resistances: ${model.resistances.join(', ')}`;
-    document.getElementById('pokemonHabitat').innerText = `Habitat: ${model.habitat}`;
-    document.getElementById('pokemonPokedexEntry').innerText = `Pokedex Entry: ${model.pokedexEntry}`;
-    document.getElementById('pokemonHeight').innerText = `Height: ${model.height} m`;
-    document.getElementById('pokemonWeight').innerText = `Weight: ${model.weight} kg`;
-    document.getElementById('pokemonEggGroup').innerText = `Egg Group: ${model.eggGroup.join(', ')}`;
-    document.getElementById('pokemonEvolvesAt').innerText = `Evolves At: Level ${model.evolvesAt}`;
-    document.getElementById('pokemonFriendship').innerText = `Friendship: ${model.friendship}`;
-    document.getElementById('pokemonBaseExp').innerText = `Base Experience: ${model.baseExp}`;
-    document.getElementById('pokemonCatchRate').innerText = `Catch Rate: ${model.catchRate}`;
-    document.getElementById('pokemonStats').innerHTML = `
-        HP: ${model.baseHP}<br>
-        Attack: ${model.stats.attack}<br>
-        Defense: ${model.stats.defense}<br>
-        Special Attack: ${model.stats.specialAttack}<br>
-        Special Defense: ${model.stats.specialDefense}<br>
-        Speed: ${model.stats.speed}
-    `;
-    document.getElementById('pokemonMoves').innerHTML = model.moves.map(move => `${move.name}: ${move.power} Power, ${move.pp} PP`).join('<br>');
+    const pokemonNameElement = document.getElementById('pokemonName');
+    if (pokemonNameElement) pokemonNameElement.innerText = pokemonName;
+
+    const pokemonEvolutionElement = document.getElementById('pokemonEvolution');
+    if (pokemonEvolutionElement) pokemonEvolutionElement.innerText = `Evolution: ${model.evolution}`;
+
+    const pokemonTypeElement = document.getElementById('pokemonType');
+    if (pokemonTypeElement) pokemonTypeElement.innerText = `Type: ${model.type.join(', ')}`;
+
+    const pokemonAbilitiesElement = document.getElementById('pokemonAbilities');
+    if (pokemonAbilitiesElement) pokemonAbilitiesElement.innerText = `Abilities: ${model.abilities.join(', ')}`;
+
+    const pokemonHiddenAbilityElement = document.getElementById('pokemonHiddenAbility');
+    if (pokemonHiddenAbilityElement) pokemonHiddenAbilityElement.innerText = `Hidden Ability: ${model.hiddenAbility}`;
+
+    const pokemonWeaknessesElement = document.getElementById('pokemonWeaknesses');
+    if (pokemonWeaknessesElement) pokemonWeaknessesElement.innerText = `Weaknesses: ${model.weaknesses.join(', ')}`;
+
+    const pokemonResistancesElement = document.getElementById('pokemonResistances');
+    if (pokemonResistancesElement) pokemonResistancesElement.innerText = `Resistances: ${model.resistances.join(', ')}`;
+
+    const pokemonHabitatElement = document.getElementById('pokemonHabitat');
+    if (pokemonHabitatElement) pokemonHabitatElement.innerText = `Habitat: ${model.habitat}`;
+
+    const pokemonPokedexEntryElement = document.getElementById('pokemonPokedexEntry');
+    if (pokemonPokedexEntryElement) pokemonPokedexEntryElement.innerText = `Pokedex Entry: ${model.pokedexEntry}`;
+
+    const pokemonHeightElement = document.getElementById('pokemonHeight');
+    if (pokemonHeightElement) pokemonHeightElement.innerText = `Height: ${model.height} m`;
+
+    const pokemonWeightElement = document.getElementById('pokemonWeight');
+    if (pokemonWeightElement) pokemonWeightElement.innerText = `Weight: ${model.weight} kg`;
+
+    const pokemonEggGroupElement = document.getElementById('pokemonEggGroup');
+    if (pokemonEggGroupElement) pokemonEggGroupElement.innerText = `Egg Group: ${model.eggGroup.join(', ')}`;
+
+    const pokemonEvolvesAtElement = document.getElementById('pokemonEvolvesAt');
+    if (pokemonEvolvesAtElement) pokemonEvolvesAtElement.innerText = `Evolves At: Level ${model.evolvesAt}`;
+
+    const pokemonFriendshipElement = document.getElementById('pokemonFriendship');
+    if (pokemonFriendshipElement) pokemonFriendshipElement.innerText = `Friendship: ${model.friendship}`;
+
+    const pokemonBaseExpElement = document.getElementById('pokemonBaseExp');
+    if (pokemonBaseExpElement) pokemonBaseExpElement.innerText = `Base Experience: ${model.baseExp}`;
+
+    const pokemonCatchRateElement = document.getElementById('pokemonCatchRate');
+    if (pokemonCatchRateElement) pokemonCatchRateElement.innerText = `Catch Rate: ${model.catchRate}`;
+
+    const pokemonHPElement = document.getElementById('pokemonHP');
+    if (pokemonHPElement) pokemonHPElement.innerText = `HP: ${model.baseHP}`;
+
+    const pokemonAttackElement = document.getElementById('pokemonAttack');
+    if (pokemonAttackElement) pokemonAttackElement.innerText = `Attack: ${model.stats.attack}`;
+
+    const pokemonDefenseElement = document.getElementById('pokemonDefense');
+    if (pokemonDefenseElement) pokemonDefenseElement.innerText = `Defense: ${model.stats.defense}`;
+
+    const pokemonSpAttackElement = document.getElementById('pokemonSpAttack');
+    if (pokemonSpAttackElement) pokemonSpAttackElement.innerText = `Special Attack: ${model.stats.specialAttack}`;
+
+    const pokemonSpDefenseElement = document.getElementById('pokemonSpDefense');
+    if (pokemonSpDefenseElement) pokemonSpDefenseElement.innerText = `Special Defense: ${model.stats.specialDefense}`;
+
+    const pokemonSpeedElement = document.getElementById('pokemonSpeed');
+    if (pokemonSpeedElement) pokemonSpeedElement.innerText = `Speed: ${model.stats.speed}`;
+
+    const pokemonMovesElement = document.getElementById('pokemonMoves');
+    if (pokemonMovesElement) {
+        pokemonMovesElement.innerHTML = model.moves.map(move => `${move.name}: ${move.power} Power, ${move.pp} PP`).join('<br>');
+    }
+
+    const pokemonMovesTable = document.getElementById('pokemonMovesTable');
+    if (pokemonMovesTable) {
+        pokemonMovesTable.innerHTML = ''; // Clear existing moves
+        model.moves.forEach(move => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${move.name}</td>
+                <td>${move.type}</td>
+                <td>${move.power}</td>
+                <td>${move.accuracy}</td>
+            `;
+            pokemonMovesTable.appendChild(row);
+        });
+    } else {
+        console.error('Element with id "pokemonMovesTable" not found.');
+    }
 
     popup.style.display = 'block'; // Ensure the popup is displayed
     popup.classList.add('show'); // Add the show class to animate the popup

@@ -62,10 +62,27 @@
         </div>
         <div class="page page-3">
           <div class="pokemon-stats">
-            <p id="pokemonStats"></p>
+            <p id="pokemonHP"></p>
+            <p id="pokemonAttack"></p>
+            <p id="pokemonDefense"></p>
+            <p id="pokemonSpAttack"></p>
+            <p id="pokemonSpDefense"></p>
+            <p id="pokemonSpeed"></p>
           </div>
           <div class="pokemon-moves">
-            <p id="pokemonMoves"></p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Move</th>
+                  <th>Type</th>
+                  <th>Power</th>
+                  <th>Accuracy</th>
+                </tr>
+              </thead>
+              <tbody id="pokemonMovesTable">
+                <!-- Moves will be dynamically inserted here -->
+              </tbody>
+            </table>
           </div>
         </div>
         <div class="navigation-buttons">

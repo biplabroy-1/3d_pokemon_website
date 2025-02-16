@@ -29,11 +29,11 @@ export const models = [
     baseHP: 78,
     stats: { attack: 84, defense: 78, specialAttack: 109, specialDefense: 85, speed: 100 },
     moves: [
-      { name: 'Flamethrower', power: 90, pp: 15 },
-      { name: 'Dragon Claw', power: 80, pp: 15 },
-      { name: 'Fly', power: 90, pp: 15 },
-      { name: 'Fire Spin', power: 35, pp: 15 }
-    ],
+      { name: 'Flamethrower', power: 90, pp: 15, type: 'Fire', accuracy: 100 },
+      { name: 'Dragon Claw', power: 80, pp: 15, type: 'Dragon', accuracy: 100 },
+      { name: 'Fly', power: 90, pp: 15, type: 'Flying', accuracy: 95 },
+      { name: 'Fire Spin', power: 35, pp: 15, type: 'Fire', accuracy: 85 }
+    ], 
     evYield: { specialAttack: 3 },
     baseExp: 240,
     catchRate: 45,
@@ -68,10 +68,10 @@ export const models = [
     baseHP: 43,
     stats: { attack: 70, defense: 48, specialAttack: 50, specialDefense: 60, speed: 38 },
     moves: [
-      { name: 'Move 1', power: 50, pp: 20 },
-      { name: 'Move 2', power: 60, pp: 15 },
-      { name: 'Move 3', power: 70, pp: 10 },
-      { name: 'Move 4', power: 80, pp: 5 }
+      { name: 'Move 1', power: 50, pp: 20, type: 'Ghost', accuracy: 100 },
+      { name: 'Move 2', power: 60, pp: 15, type: 'Grass', accuracy: 95 },
+      { name: 'Move 3', power: 70, pp: 10, type: 'Ghost', accuracy: 90 },
+      { name: 'Move 4', power: 80, pp: 5, type: 'Grass', accuracy: 85 }
     ],
     evYield: { attack: 1 },
     baseExp: 62,
@@ -101,10 +101,10 @@ export const models = [
     baseHP: 95,
     stats: { attack: 135, defense: 80, specialAttack: 110, specialDefense: 80, speed: 100 },
     moves: [
-      { name: 'Dragon Claw', power: 80, pp: 15 },
-      { name: 'Fly', power: 90, pp: 15 },
-      { name: 'Crunch', power: 80, pp: 15 },
-      { name: 'Flamethrower', power: 90, pp: 15 }
+      { name: 'Dragon Claw', power: 80, pp: 15, type: 'Dragon', accuracy: 100 },
+      { name: 'Fly', power: 90, pp: 15, type: 'Flying', accuracy: 95 },
+      { name: 'Crunch', power: 80, pp: 15, type: 'Dark', accuracy: 100 },
+      { name: 'Flamethrower', power: 90, pp: 15, type: 'Fire', accuracy: 100 }
     ],
     evYield: { attack: 3 },
     baseExp: 270,
@@ -140,10 +140,10 @@ export const models = [
     baseHP: 45,
     stats: { attack: 49, defense: 49, specialAttack: 65, specialDefense: 65, speed: 45 },
     moves: [
-      { name: 'Vine Whip', power: 45, pp: 25 },
-      { name: 'Razor Leaf', power: 55, pp: 25 },
-      { name: 'Seed Bomb', power: 80, pp: 15 },
-      { name: 'Solar Beam', power: 120, pp: 10 }
+      { name: 'Vine Whip', power: 45, pp: 25, type: 'Grass', accuracy: 100 },
+      { name: 'Razor Leaf', power: 55, pp: 25, type: 'Grass', accuracy: 95 },
+      { name: 'Seed Bomb', power: 80, pp: 15, type: 'Grass', accuracy: 100 },
+      { name: 'Solar Beam', power: 120, pp: 10, type: 'Grass', accuracy: 100 }
     ],
     evYield: { specialAttack: 1 },
     baseExp: 64,
@@ -178,10 +178,10 @@ export const models = [
     baseHP: 70,
     stats: { attack: 110, defense: 70, specialAttack: 115, specialDefense: 70, speed: 90 },
     moves: [
-      { name: 'Aura Sphere', power: 80, pp: 20 },
-      { name: 'Close Combat', power: 120, pp: 5 },
-      { name: 'Dragon Pulse', power: 85, pp: 10 },
-      { name: 'Extreme Speed', power: 80, pp: 5 }
+      { name: 'Aura Sphere', power: 80, pp: 20, type: 'Fighting', accuracy: 100 },
+      { name: 'Close Combat', power: 120, pp: 5, type: 'Fighting', accuracy: 100 },
+      { name: 'Dragon Pulse', power: 85, pp: 10, type: 'Dragon', accuracy: 100 },
+      { name: 'Extreme Speed', power: 80, pp: 5, type: 'Normal', accuracy: 100 }
     ],
     evYield: { attack: 1, specialAttack: 1 },
     baseExp: 184,
@@ -217,10 +217,10 @@ export const models = [
     baseHP: 55,
     stats: { attack: 55, defense: 50, specialAttack: 45, specialDefense: 65, speed: 55 },
     moves: [
-      { name: 'Quick Attack', power: 40, pp: 30 },
-      { name: 'Bite', power: 60, pp: 25 },
-      { name: 'Swift', power: 60, pp: 20 },
-      { name: 'Take Down', power: 90, pp: 20 }
+      { name: 'Quick Attack', power: 40, pp: 30, type: 'Normal', accuracy: 100 },
+      { name: 'Bite', power: 60, pp: 25, type: 'Dark', accuracy: 100 },
+      { name: 'Swift', power: 60, pp: 20, type: 'Normal', accuracy: 100 },
+      { name: 'Take Down', power: 90, pp: 20, type: 'Normal', accuracy: 85 }
     ],
     evYield: { specialDefense: 1 },
     baseExp: 65,
@@ -250,10 +250,10 @@ export const models = [
     baseHP: 35,
     stats: { attack: 55, defense: 40, specialAttack: 50, specialDefense: 50, speed: 90 },
     moves: [
-      { name: 'Thunderbolt', power: 90, pp: 15 },
-      { name: 'Quick Attack', power: 40, pp: 30 },
-      { name: 'Iron Tail', power: 100, pp: 15 },
-      { name: 'Electro Ball', power: 'Varies', pp: 10 }
+      { name: 'Thunderbolt', power: 90, pp: 15, type: 'Electric', accuracy: 100 },
+      { name: 'Quick Attack', power: 40, pp: 30, type: 'Normal', accuracy: 100 },
+      { name: 'Iron Tail', power: 100, pp: 15, type: 'Steel', accuracy: 75 },
+      { name: 'Electro Ball', power: 'Varies', pp: 10, type: 'Electric', accuracy: 100 }
     ],
     evYield: { speed: 2 },
     baseExp: 112,
@@ -283,10 +283,10 @@ export const models = [
     baseHP: 95,
     stats: { attack: 65, defense: 110, specialAttack: 60, specialDefense: 130, speed: 65 },
     moves: [
-      { name: 'Foul Play', power: 95, pp: 15 },
-      { name: 'Dark Pulse', power: 80, pp: 15 },
-      { name: 'Shadow Ball', power: 80, pp: 15 },
-      { name: 'Moonlight', power: 'N/A', pp: 5 }
+      { name: 'Foul Play', power: 95, pp: 15, type: 'Dark', accuracy: 100 },
+      { name: 'Dark Pulse', power: 80, pp: 15, type: 'Dark', accuracy: 100 },
+      { name: 'Shadow Ball', power: 80, pp: 15, type: 'Ghost', accuracy: 100 },
+      { name: 'Moonlight', power: 'N/A', pp: 5, type: 'Fairy', accuracy: 'N/A' }
     ],
     evYield: { specialDefense: 2 },
     baseExp: 184,
@@ -316,10 +316,10 @@ export const models = [
     baseHP: 40,
     stats: { attack: 45, defense: 40, specialAttack: 35, specialDefense: 35, speed: 56 },
     moves: [
-      { name: 'Gust', power: 40, pp: 35 },
-      { name: 'Quick Attack', power: 40, pp: 30 },
-      { name: 'Wing Attack', power: 60, pp: 35 },
-      { name: 'Air Slash', power: 75, pp: 15 }
+      { name: 'Gust', power: 40, pp: 35, type: 'Flying', accuracy: 100 },
+      { name: 'Quick Attack', power: 40, pp: 30, type: 'Normal', accuracy: 100 },
+      { name: 'Wing Attack', power: 60, pp: 35, type: 'Flying', accuracy: 100 },
+      { name: 'Air Slash', power: 75, pp: 15, type: 'Flying', accuracy: 95 }
     ],
     evYield: { speed: 1 },
     baseExp: 50,
@@ -349,10 +349,10 @@ export const models = [
     baseHP: 90,
     stats: { attack: 110, defense: 80, specialAttack: 100, specialDefense: 80, speed: 95 },
     moves: [
-      { name: 'Flamethrower', power: 90, pp: 15 },
-      { name: 'Extreme Speed', power: 80, pp: 5 },
-      { name: 'Crunch', power: 80, pp: 15 },
-      { name: 'Flare Blitz', power: 120, pp: 15 }
+      { name: 'Flamethrower', power: 90, pp: 15, type: 'Fire', accuracy: 100 },
+      { name: 'Extreme Speed', power: 80, pp: 5, type: 'Normal', accuracy: 100 },
+      { name: 'Crunch', power: 80, pp: 15, type: 'Dark', accuracy: 100 },
+      { name: 'Flare Blitz', power: 120, pp: 15, type: 'Fire', accuracy: 100 }
     ],
     evYield: { attack: 2 },
     baseExp: 194,
@@ -378,10 +378,10 @@ export const models = [
     evolution: 'X -> Trainer -> Y',
     stats: { attack: 70, defense: 70, specialAttack: 70, specialDefense: 70, speed: 70 },
     moves: [
-      { name: 'Move 1', power: 50, pp: 20 },
-      { name: 'Move 2', power: 60, pp: 15 },
-      { name: 'Move 3', power: 70, pp: 10 },
-      { name: 'Move 4', power: 80, pp: 5 }
+      { name: 'Move 1', power: 50, pp: 20, type: 'Normal', accuracy: 100 },
+      { name: 'Move 2', power: 60, pp: 15, type: 'Normal', accuracy: 95 },
+      { name: 'Move 3', power: 70, pp: 10, type: 'Normal', accuracy: 90 },
+      { name: 'Move 4', power: 80, pp: 5, type: 'Normal', accuracy: 85 }
     ]
   },
   { 
@@ -393,10 +393,10 @@ export const models = [
     evolution: 'X -> Plakia -> Y',
     stats: { attack: 120, defense: 100, specialAttack: 150, specialDefense: 120, speed: 90 },
     moves: [
-      { name: 'Move 1', power: 100, pp: 15 },
-      { name: 'Move 2', power: 90, pp: 15 },
-      { name: 'Move 3', power: 80, pp: 10 },
-      { name: 'Move 4', power: 70, pp: 5 }
+      { name: 'Move 1', power: 100, pp: 15, type: 'Normal', accuracy: 100 },
+      { name: 'Move 2', power: 90, pp: 15, type: 'Normal', accuracy: 95 },
+      { name: 'Move 3', power: 80, pp: 10, type: 'Normal', accuracy: 90 },
+      { name: 'Move 4', power: 70, pp: 5, type: 'Normal', accuracy: 85 }
     ]
   },
   { 
@@ -409,10 +409,10 @@ export const models = [
     evolution: 'X -> Entei -> Y',
     stats: { attack: 115, defense: 85, specialAttack: 90, specialDefense: 75, speed: 100 },
     moves: [
-      { name: 'Move 1', power: 100, pp: 15 },
-      { name: 'Move 2', power: 90, pp: 15 },
-      { name: 'Move 3', power: 80, pp: 10 },
-      { name: 'Move 4', power: 70, pp: 5 }
+      { name: 'Move 1', power: 100, pp: 15, type: 'Fire', accuracy: 100 },
+      { name: 'Move 2', power: 90, pp: 15, type: 'Fire', accuracy: 95 },
+      { name: 'Move 3', power: 80, pp: 10, type: 'Fire', accuracy: 90 },
+      { name: 'Move 4', power: 70, pp: 5, type: 'Fire', accuracy: 85 }
     ]
   },
   { 
@@ -424,10 +424,10 @@ export const models = [
     evolution: 'X -> Reshiram -> Y',
     stats: { attack: 120, defense: 100, specialAttack: 150, specialDefense: 120, speed: 90 },
     moves: [
-      { name: 'Move 1', power: 100, pp: 15 },
-      { name: 'Move 2', power: 90, pp: 15 },
-      { name: 'Move 3', power: 80, pp: 10 },
-      { name: 'Move 4', power: 70, pp: 5 }
+      { name: 'Move 1', power: 100, pp: 15, type: 'Fire', accuracy: 100 },
+      { name: 'Move 2', power: 90, pp: 15, type: 'Fire', accuracy: 95 },
+      { name: 'Move 3', power: 80, pp: 10, type: 'Fire', accuracy: 90 },
+      { name: 'Move 4', power: 70, pp: 5, type: 'Fire', accuracy: 85 }
     ]
   },
   { 

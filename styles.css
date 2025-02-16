@@ -203,14 +203,15 @@ body {
     justify-content: center;
     width: 100%; /* Ensure the container takes full width */
     padding: 20px;
-    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    background-color: rgba(0, 0, 0, 0.6); 
     border-radius: 10px;
 }
 
 .pokemon-popup .page-3 p {
     font-size: 18px;
-    margin: 10px 0;
     text-align: center;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
 }
 
 .pokemon-popup .page-3 .pokemon-abilities {
@@ -218,14 +219,44 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 10px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    margin-bottom: 20px;
+    /* padding: 10px; */
+    /* margin-bottom: 20px; */
 }
 
 .pokemon-popup .page-3 .pokemon-abilities p {
-    margin: 5px 0;
+    /* margin: 5px 0; */
+}
+
+.pokemon-popup .page-3 .pokemon-stats p {
+    /* margin: 5px 0; */
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 6px;
+}
+
+.pokemon-popup .page-3 .pokemon-moves table {
+    width: 100%;
+    border-collapse: collapse;
+    /* margin-top: 20px; */
+    border-radius: 20px;
+}
+
+.pokemon-popup .page-3 .pokemon-moves th,
+.pokemon-popup .page-3 .pokemon-moves td {
+    border: 1px solid #444;
+    padding: 7px;
+    text-align: center;
+}
+
+.pokemon-popup .page-3 .pokemon-moves th {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+}
+
+.pokemon-popup .page-3 .pokemon-moves td {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
 }
 
 .pokemon-popup .page.active {
