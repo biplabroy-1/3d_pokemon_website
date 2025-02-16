@@ -4,6 +4,7 @@ import { models } from './models.js'; // Import models
 
 let renderer, scene, camera;
 const raycaster = new THREE.Raycaster();
+let popupOpen = false; // Track if popup is open
 
 function initThreeJS(container) {
     const canvas = document.createElement('canvas'); // Create a new canvas element
@@ -52,6 +53,7 @@ export function showPopup() {
         closeBtn.innerHTML = '×';
         closeBtn.onclick = function () {
             popup.style.display = 'none';
+            popupOpen = false; // Set popup open status to false
         };
 
         const message = document.createElement('span');
@@ -62,6 +64,7 @@ export function showPopup() {
         document.body.appendChild(popup);
     }
     popup.style.display = 'block';
+    popupOpen = true; // Set popup open status to true
 }
 
 // Function to show Pokemon popup
@@ -182,6 +185,7 @@ export function showPokemonPopup(pokemonName) {
 
     popup.style.display = 'block'; // Ensure the popup is displayed
     popup.classList.add('show'); // Add the show class to animate the popup
+    popupOpen = true; // Set popup open status to true
 
     updatePageVisibility(); // Ensure only the first page is visible initially
 }
@@ -204,12 +208,14 @@ function updatePageVisibility() {
     });
 
     // Hide right column when not on the first page
-    const activePageIndex = Array.from(pages).findIndex(page => page.classList.contains('active'));
-    rightColumn.style.display = activePageIndex === 0 ? 'block' : 'none';
+    if (rightColumn) {
+        const activePageIndex = Array.from(pages).findIndex(page => page.classList.contains('active'));
+        rightColumn.style.display = activePageIndex === 0 ? 'block' : 'none';
+    }
 }
 
 // Navigation buttons
-document.getElementById('prevPage').addEventListener('click', () => {
+document.getElementById('prevPage')?.addEventListener('click', () => {
     const pages = document.querySelectorAll('.page');
     let activePageIndex = Array.from(pages).findIndex(page => page.classList.contains('active'));
 
@@ -222,7 +228,7 @@ document.getElementById('prevPage').addEventListener('click', () => {
     updatePageVisibility();
 });
 
-document.getElementById('nextPage').addEventListener('click', () => {
+document.getElementById('nextPage')?.addEventListener('click', () => {
     const pages = document.querySelectorAll('.page');
     let activePageIndex = Array.from(pages).findIndex(page => page.classList.contains('active'));
 
@@ -233,4 +239,15 @@ document.getElementById('nextPage').addEventListener('click', () => {
     }
 
     updatePageVisibility();
+});
+
+export function isPopupOpen() {
+    return popupOpen;
+}
+
+// Ensure popupOpen is set to false when the popup is closed
+document.querySelectorAll('.close-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        popupOpen = false;
+    });
 });

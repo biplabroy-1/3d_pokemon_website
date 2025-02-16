@@ -5,7 +5,7 @@ import { FBXLoader } from "three/addons/loaders/FBXLoader.js"; // Import FBXLoad
 import { models } from "./models.js"; // Import models
 import { CharacterControl } from "./CharacterControl.js"; // Import CharacterControl
 import { loadingScreen, loadingText, loadingBar, updateLoadingScreen, loadingComplete } from "./loadingScreen.js"; // Import loading screen
-import { showPopup, showPokemonPopup } from "./popups.js"; // Import popup functions
+import { showPopup, showPokemonPopup, isPopupOpen } from "./popups.js"; // Import popup functions
 
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
@@ -194,7 +194,7 @@ const keyPressed = {};
 document.addEventListener(
   "keydown",
   (event) => {
-    if (loadingComplete) { // Only allow key events if loading is complete
+    if (loadingComplete && !isPopupOpen()) { // Only allow key events if loading is complete and popup is not open
       if (event.shiftKey && characterControl) {
         characterControl.switchRunToggle();
       } else {
@@ -208,7 +208,7 @@ document.addEventListener(
 document.addEventListener(
   "keyup",
   (event) => {
-    if (loadingComplete) { // Only allow key events if loading is complete
+    if (loadingComplete && !isPopupOpen()) { // Only allow key events if loading is complete and popup is not open
       keyPressed[event.key.toLowerCase()] = false;
     }
   },
