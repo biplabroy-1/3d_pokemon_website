@@ -125,8 +125,7 @@ class CharacterControl {
       this.walkDirection.normalize();
       this.walkDirection.applyAxisAngle(this.rotateAngle, directionOffset);
 
-      const velocity =
-        this.currentAction === "run" ? this.runVelocity : this.walkVelocity;
+      const velocity = this.walkVelocity; // Set a uniform velocity
       const moveX = this.walkDirection.x * velocity * delta;
       const moveZ = this.walkDirection.z * velocity * delta;
 

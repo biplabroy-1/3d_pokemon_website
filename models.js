@@ -167,6 +167,7 @@ export const models = [
   },
   { 
     path: "./models/lucario_and_riolu_toy_edition.glb", 
+    imagePath: "/Images/Lucario.webp",
     scale: 2, 
     position: [-27, 6.5, 6], 
     rotation: [0, Math.PI / 3, 0], 
