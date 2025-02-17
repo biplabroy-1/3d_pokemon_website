@@ -18,18 +18,8 @@ function initThreeJS(container) {
     camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
     camera.position.z = 5;
 
-    const light = new THREE.AmbientLight(0x404040, 5);
+    const light = new THREE.AmbientLight(0x404040, 3);
     scene.add(light);
-
-    // Add event listener for the signboard click
-    const signboard = document.getElementById('signboard'); // Ensure this ID matches your HTML
-    if (signboard) {
-        signboard.addEventListener('click', () => {
-            showPopup(); // Call the function to show the popup
-        });
-    } else {
-        console.error('Signboard element not found.');
-    }
 }
 
 function renderModel(model) {
@@ -85,15 +75,6 @@ export function showPokemonPopup(pokemonName) {
     const popup = document.getElementById('pokemonPopup');
     const modelContainer = document.getElementById('modelContainer');
     modelContainer.innerHTML = ''; // Clear previous model
-
-    // Reset to the first page
-    const pages = document.querySelectorAll('.page');
-    pages.forEach((page, index) => {
-        page.classList.remove('active'); // Remove active class from all pages
-        page.style.display = 'none'; // Hide all pages
-    });
-    pages[0].classList.add('active'); // Set the first page as active
-    pages[0].style.display = 'block'; // Show the first page
 
     // Display image if the imagePath is provided
     if (model.imagePath) {
@@ -213,18 +194,12 @@ export function showPokemonPopup(pokemonName) {
 function updatePageVisibility() {
     const pages = document.querySelectorAll('.page');
     const rightColumn = document.getElementById('rightColumn'); // Get right column
-    const prevButton = document.getElementById('prevPage'); // Get previous button
-    const nextButton = document.getElementById('nextPage'); // Get next button
 
-    pages.forEach((page, index) => {
+    pages.forEach(page => {
         if (page.classList.contains('active')) {
             page.style.opacity = '1';
             page.style.visibility = 'visible';
             page.style.display = 'block';
-
-            // Show/hide navigation buttons based on the active page
-            prevButton.style.display = index === 0 ? 'none' : 'block'; // Hide on first page
-            nextButton.style.display = index === pages.length - 1 ? 'none' : 'block'; // Hide on last page
         } else {
             page.style.opacity = '0';
             page.style.visibility = 'hidden';
