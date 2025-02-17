@@ -66,7 +66,7 @@ class CharacterControl {
     const animations = [
       { path: "./models/Idle.fbx", name: "idle", timeScale: 1.0 },
       { path: "./models/Walking.fbx", name: "walk", timeScale: 1.0 },
-      { path: "./models/Running.fbx", name: "run", timeScale: 4.0 }
+      { path: "./models/Running.fbx", name: "run", timeScale: 6.0 } // Increase running animation speed
     ];
 
     animations.forEach(anim => {
@@ -119,7 +119,7 @@ class CharacterControl {
         this.rotateAngle,
         angleYCameraDirection + directionOffset + Math.PI
       );
-      this.avatar.quaternion.rotateTowards(this.rotateQuarternion, 0.2);
+      this.avatar.quaternion.copy(this.rotateQuarternion); // Instantly set the quaternion
       this.camera.getWorldDirection(this.walkDirection);
       this.walkDirection.y = 0;
       this.walkDirection.normalize();
