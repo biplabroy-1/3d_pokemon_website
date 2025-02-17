@@ -76,6 +76,18 @@ export function showPokemonPopup(pokemonName) {
     const modelContainer = document.getElementById('modelContainer');
     modelContainer.innerHTML = ''; // Clear previous model
 
+    // Reset to the first page
+    const pages = document.querySelectorAll('.page');
+    pages.forEach((page, index) => {
+        page.classList.remove('active'); // Remove active class from all pages
+        page.style.display = 'none'; // Hide all pages
+    });
+    pages[0].classList.add('active'); // Set the first page as active
+    pages[0].style.display = 'block'; // Show the first page
+
+    // Ensure navigation buttons are updated
+    updatePageVisibility(); // Ensure only the first page is visible initially
+
     // Display image if the imagePath is provided
     if (model.imagePath) {
         const img = document.createElement('img');
@@ -186,20 +198,24 @@ export function showPokemonPopup(pokemonName) {
     popup.style.display = 'block'; // Ensure the popup is displayed
     popup.classList.add('show'); // Add the show class to animate the popup
     popupOpen = true; // Set popup open status to true
-
-    updatePageVisibility(); // Ensure only the first page is visible initially
 }
 
 // Function to manage page visibility
 function updatePageVisibility() {
     const pages = document.querySelectorAll('.page');
     const rightColumn = document.getElementById('rightColumn'); // Get right column
+    const prevButton = document.getElementById('prevPage'); // Get previous button
+    const nextButton = document.getElementById('nextPage'); // Get next button
 
-    pages.forEach(page => {
+    pages.forEach((page, index) => {
         if (page.classList.contains('active')) {
             page.style.opacity = '1';
             page.style.visibility = 'visible';
             page.style.display = 'block';
+
+            // Show/hide navigation buttons based on the active page
+            prevButton.style.display = index === 0 ? 'none' : 'block'; // Hide on first page
+            nextButton.style.display = index === pages.length - 1 ? 'none' : 'block'; // Hide on last page
         } else {
             page.style.opacity = '0';
             page.style.visibility = 'hidden';
