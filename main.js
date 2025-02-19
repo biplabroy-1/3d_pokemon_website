@@ -125,6 +125,38 @@ window.addEventListener('click', (event) => {
     onPokemonClick(event);
 });
 
+// Add event listener for the "c" key to show the chat box
+document.addEventListener('keydown', (event) => {
+    if (event.key.toLowerCase() === 'c') {
+        showChatBox();
+    }
+});
+
+function showChatBox() {
+    let chatBox = document.getElementById('chatBox');
+    if (!chatBox) {
+        chatBox = document.createElement('div');
+        chatBox.id = 'chatBox';
+        chatBox.className = 'chat-box';
+
+        const closeBtn = document.createElement('span');
+        closeBtn.className = 'close-btn';
+        closeBtn.innerHTML = '×';
+        closeBtn.onclick = function () {
+            chatBox.style.display = 'none';
+        };
+
+        const chatContent = document.createElement('div');
+        chatContent.className = 'chat-content';
+        chatContent.innerHTML = 'This is a chat box.';
+
+        chatBox.appendChild(closeBtn);
+        chatBox.appendChild(chatContent);
+        document.body.appendChild(chatBox);
+    }
+    chatBox.style.display = 'block';
+}
+
 const sun = new THREE.DirectionalLight(0xffffff, 1);
 scene.add(sun);
 sun.position.set(100, 100, 100);
