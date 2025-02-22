@@ -6,7 +6,7 @@ import { models } from "./models.js"; // Import models
 import { CharacterControl } from "./CharacterControl.js"; // Import CharacterControl
 import { loadingScreen, loadingText, loadingBar, updateLoadingScreen, loadingComplete } from "./loadingScreen.js"; // Import loading screen
 import { showPopup, showPokemonPopup, isPopupOpen } from "./popups.js"; // Import popup functions
-
+ 
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 const scene = new THREE.Scene();
