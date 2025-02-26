@@ -167,7 +167,7 @@ export const models = [
   },
   { 
     path: "./models/lucario_and_riolu_toy_edition.glb", 
-    imagePath: "./Images/bulbasaur.webp", // Add image path
+    imagePath: "./Images/Lucario.webp", // Add image path
     scale: 2, 
     position: [-27, 6.5, 6], 
     rotation: [0, Math.PI / 3, 0], 
