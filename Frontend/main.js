@@ -106,7 +106,7 @@ function onPokemonClick(event) {
 
   if (intersects.length > 0) {
       let clickedObject = intersects[0].object;
-
+ 
       // Traverse up to find the correct parent object that holds the Pokémon name
       while (clickedObject.parent) {
           if (clickedObject.userData.pokemonName) {
