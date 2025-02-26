@@ -16,7 +16,7 @@ export const models = [
   },
   { 
     path: "./models/Charzard Flying.glb", 
-    imagePath: "/Images/charizard flying.jpg", // Add image path
+    imagePath: "./Images/charizard flying.jpg", // Add image path
     scale: 3, 
     position: [0, 20, 0], 
     rotation: [0, 0, 0], 
@@ -56,7 +56,7 @@ export const models = [
   },
   { 
     path: "./models/phantump_shiny.glb", 
-    imagePath: "/Images/phantump.webp", // Add image path
+    imagePath: "./Images/phantump.webp", // Add image path
     scale: 0.01, 
     position: [3, 5, 9], 
     rotation: [0, 0, 0], 
@@ -89,7 +89,7 @@ export const models = [
   },
   { 
     path: "./models/salamence.glb", 
-    imagePath: "/Images/Salamence.webp", // Add image path
+    imagePath: "./Images/Salamence.webp", // Add image path
     scale: 0.3, 
     position: [-30, 16, 27], 
     rotation: [0, (Math.PI * 2) / 3, 0], 
@@ -128,7 +128,7 @@ export const models = [
   },
   { 
     path: "./models/bulbasaur.glb", 
-    imagePath: "/Images/bulbasaur.webp", // Add image path
+    imagePath: "./Images/bulbasaur.webp", // Add image path
     scale: 2, 
     position: [13, -0.5, 22], 
     rotation: [0, 0, 0], 
@@ -167,6 +167,7 @@ export const models = [
   },
   { 
     path: "./models/lucario_and_riolu_toy_edition.glb", 
+    imagePath: "./Images/bulbasaur.webp", // Add image path
     scale: 2, 
     position: [-27, 6.5, 6], 
     rotation: [0, Math.PI / 3, 0], 
@@ -205,7 +206,7 @@ export const models = [
   },
   { 
     path: "./models/eevee.glb", 
-    imagePath: "/Images/eevee.webp", // Add image path
+    imagePath: "./Images/eevee.webp", // Add image path
     scale: 3.5, 
     position: [7, 0, 10], 
     rotation: [0, 0, 0], 
@@ -238,7 +239,7 @@ export const models = [
   },
   { 
     path: "./models/pikachu.glb", 
-    imagePath: "/Images/pikachu-trailer.png", // Add image path
+    imagePath: "./Images/pikachu-trailer.png", // Add image path
     scale: 0.03, 
     position: [5, 0, 10], 
     rotation: [0, 0, 0], 
@@ -271,7 +272,7 @@ export const models = [
   },
   { 
     path: "./models/umbreon.glb", 
-    imagePath: "/Images/umbreon.webp", // Add image path
+    imagePath: "./Images/umbreon.webp", // Add image path
     scale: 3, 
     position: [6, 0, 10], 
     rotation: [0, 0, 0], 
@@ -304,7 +305,7 @@ export const models = [
   },
   { 
     path: "./models/pidgey.glb", 
-    imagePath: "/Images/pidgey.webp", // Add image path
+    imagePath: "./Images/pidgey.webp", // Add image path
     scale: 0.4, 
     position: [-2.5, 7, 32], 
     rotation: [0, Math.PI, 0], 
@@ -337,7 +338,7 @@ export const models = [
   },
   { 
     path: "./models/arcanine.glb", 
-    imagePath: "/Images/arcanine.webp", // Add image path
+    imagePath: "./Images/arcanine.webp", // Add image path
     scale: 1, 
     position: [10, 3.2, 29], 
     rotation: [0, (-Math.PI * 3) / 4, 0], 
@@ -386,6 +387,7 @@ export const models = [
   },
   { 
     path: "./models/plakia.glb", 
+    imagePath: "./Images/bulbasaur.webp", // Add image path
     scale: 0.6, 
     position: [-32, 23, -19], 
     rotation: [0, Math.PI / 2, 0], 
@@ -401,7 +403,7 @@ export const models = [
   },
   { 
     path: "./models/entei.glb", 
-    imagePath: "/Images/Entei.webp", // Add image path
+    imagePath: "./Images/Entei.webp", // Add image path
     scale: 0.4, 
     position: [-25, 15.5, -4], 
     rotation: [0, Math.PI / 2, 0], 
@@ -417,6 +419,7 @@ export const models = [
   },
   { 
     path: "./models/reshiram.glb", 
+    imagePath: "./Images/bulbasaur.webp", // Add image path
     scale: 3.5, 
     position: [60, 23, -14], 
     rotation: [0, -Math.PI / 4, 0], 

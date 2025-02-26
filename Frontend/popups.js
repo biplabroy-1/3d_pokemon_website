@@ -94,6 +94,7 @@ export function showPokemonPopup(pokemonName) {
         img.src = model.imagePath;
         img.style.width = '100%';
         img.style.height = 'auto';
+        img.alt = pokemonName; // Set alt attribute for the image
         modelContainer.appendChild(img);
     } else {
         // Load and display 3D model
